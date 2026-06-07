@@ -1,0 +1,79 @@
+[
+  {
+    "id": "scroll_of_identification",
+    "name": "Scroll of Identification",
+    "description": "Identifies an unidentified item",
+    "effectType": "identify",
+    "stackSize": 40
+  },
+  {
+    "id": "orb_of_transmutation",
+    "name": "Orb of Transmutation",
+    "description": "Upgrades a Normal item to Magic",
+    "effectType": "upgrade_magic",
+    "stackSize": 20
+  },
+  {
+    "id": "orb_of_alteration",
+    "name": "Orb of Alteration",
+    "description": "Rerolls affixes on a Magic item",
+    "effectType": "reroll_magic",
+    "stackSize": 20
+  },
+  {
+    "id": "orb_of_augmentation",
+    "name": "Orb of Augmentation",
+    "description": "Adds one affix to a Magic item with only 1 affix",
+    "effectType": "add_affix_magic",
+    "stackSize": 20
+  },
+  {
+    "id": "regal_orb",
+    "name": "Regal Orb",
+    "description": "Upgrades a Magic item to Rare",
+    "effectType": "upgrade_rare",
+    "stackSize": 10
+  },
+  {
+    "id": "orb_of_alchemy",
+    "name": "Orb of Alchemy",
+    "description": "Upgrades a Normal item to Rare",
+    "effectType": "upgrade_rare_full",
+    "stackSize": 10
+  },
+  {
+    "id": "chaos_orb",
+    "name": "Chaos Orb",
+    "description": "Rerolls all affixes on a Rare item",
+    "effectType": "reroll_rare",
+    "stackSize": 10
+  },
+  {
+    "id": "exalted_orb",
+    "name": "Exalted Orb",
+    "description": "Adds one random affix to a Rare item",
+    "effectType": "add_affix_rare",
+    "stackSize": 10
+  },
+  {
+    "id": "orb_of_scouring",
+    "name": "Orb of Scouring",
+    "description": "Removes all affixes from an item",
+    "effectType": "scour",
+    "stackSize": 10
+  },
+  {
+    "id": "vaal_orb",
+    "name": "Vaal Orb",
+    "description": "Corrupts an item — random effect; cannot be modified further",
+    "effectType": "corrupt",
+    "stackSize": 10
+  },
+  {
+    "id": "orb_of_regret",
+    "name": "Orb of Regret",
+    "description": "Refunds one passive skill tree point",
+    "effectType": "refund_passive",
+    "stackSize": 10
+  }
+]

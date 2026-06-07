@@ -1,0 +1,36 @@
+[
+  {
+    "id": 1,
+    "name": "Ironclad Start",
+    "type": "class_start",
+    "classId": "ironclad",
+    "statBonuses": { "damage_percent": 0, "armour_percent": 15, "rage_gain_on_attack": 3 },
+    "connections": [2],
+    "position": { "x": 0, "y": 0 }
+  },
+  {
+    "id": 2,
+    "name": "War Forged",
+    "type": "notable",
+    "statBonuses": { "armour_percent": 20, "physical_damage_percent": 10 },
+    "connections": [1],
+    "position": { "x": 0, "y": -80 }
+  },
+  {
+    "id": 3,
+    "name": "Ranger Start",
+    "type": "class_start",
+    "classId": "ranger",
+    "statBonuses": { "projectile_speed_percent": 15, "move_speed_percent": 10, "crit_chance_percent": 5 },
+    "connections": [4],
+    "position": { "x": 400, "y": 0 }
+  },
+  {
+    "id": 4,
+    "name": "Swift Arrows",
+    "type": "notable",
+    "statBonuses": { "attack_speed_percent": 8, "projectile_damage_percent": 15 },
+    "connections": [3],
+    "position": { "x": 400, "y": -80 }
+  }
+]

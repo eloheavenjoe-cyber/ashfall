@@ -1,0 +1,53 @@
+[
+  {
+    "id": "hollow_husk",
+    "name": "Hollow Husk",
+    "tier": "normal",
+    "attackType": "melee",
+    "baseHP": 40,
+    "baseDamage": 8,
+    "moveSpeed": 60,
+    "detectionRadius": 5,
+    "attackRange": 1.5,
+    "xpReward": 10,
+    "lootTable": {
+      "goldDrop": { "min": 5, "max": 15 },
+      "itemDropChance": 0.2,
+      "itemTypeWeights": { "weapon": 0.2, "armour": 0.5, "accessory": 0.2, "currency": 0.1 }
+    }
+  },
+  {
+    "id": "scabrous_rat",
+    "name": "Scabrous Rat",
+    "tier": "normal",
+    "attackType": "melee",
+    "baseHP": 20,
+    "baseDamage": 5,
+    "moveSpeed": 120,
+    "detectionRadius": 4,
+    "attackRange": 1,
+    "xpReward": 5,
+    "lootTable": {
+      "goldDrop": { "min": 2, "max": 8 },
+      "itemDropChance": 0.1,
+      "itemTypeWeights": { "weapon": 0.1, "armour": 0.3, "accessory": 0.1, "currency": 0.5 }
+    }
+  },
+  {
+    "id": "grave_archer",
+    "name": "Grave Archer",
+    "tier": "normal",
+    "attackType": "ranged",
+    "baseHP": 30,
+    "baseDamage": 10,
+    "moveSpeed": 70,
+    "detectionRadius": 7,
+    "attackRange": 5,
+    "xpReward": 12,
+    "lootTable": {
+      "goldDrop": { "min": 8, "max": 20 },
+      "itemDropChance": 0.25,
+      "itemTypeWeights": { "weapon": 0.4, "armour": 0.3, "accessory": 0.2, "currency": 0.1 }
+    }
+  }
+]

@@ -1,0 +1,40 @@
+[
+  {
+    "id": "ironclad",
+    "name": "Ironclad",
+    "resourceType": "rage",
+    "baseStats": {
+      "health": 120,
+      "maxResource": 100,
+      "resourceRegen": 0,
+      "armour": 15,
+      "moveSpeed": 185,
+      "strength": 18,
+      "dexterity": 8,
+      "intelligence": 5,
+      "critChance": 5,
+      "critMultiplier": 150
+    },
+    "startingSkillIds": ["crushing_blow", "seismic_slam", "iron_fortress", "berserker_charge", "whirlwind"],
+    "passives": ["ironclad_start"]
+  },
+  {
+    "id": "ranger",
+    "name": "Ranger",
+    "resourceType": "stamina",
+    "baseStats": {
+      "health": 80,
+      "maxResource": 100,
+      "resourceRegen": 15,
+      "evasion": 12,
+      "moveSpeed": 220,
+      "strength": 7,
+      "dexterity": 20,
+      "intelligence": 8,
+      "critChance": 10,
+      "critMultiplier": 150
+    },
+    "startingSkillIds": ["quickshot", "multishot", "explosive_arrow", "vaulting_escape", "rain_of_arrows"],
+    "passives": ["ranger_start"]
+  }
+]

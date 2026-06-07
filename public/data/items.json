@@ -1,0 +1,67 @@
+[
+  {
+    "id": "iron_plate",
+    "name": "Iron Plate",
+    "slot": "body",
+    "subtype": "armour",
+    "implicit": { "statKey": "armour", "value": 5, "label": "+5 Armour" },
+    "armourRange": { "min": 80, "max": 120 },
+    "requirements": { "strength": 25 },
+    "maxSockets": 4
+  },
+  {
+    "id": "leather_coat",
+    "name": "Leather Coat",
+    "slot": "body",
+    "subtype": "evasion",
+    "implicit": { "statKey": "evasion", "value": 4, "label": "+4 Evasion" },
+    "evasionRange": { "min": 50, "max": 80 },
+    "requirements": { "dexterity": 20 },
+    "maxSockets": 3
+  },
+  {
+    "id": "chain_mail",
+    "name": "Chain Mail",
+    "slot": "body",
+    "subtype": "hybrid",
+    "implicit": { "statKey": "armour", "value": 3, "label": "+3 Armour" },
+    "armourRange": { "min": 60, "max": 90 },
+    "evasionRange": { "min": 60, "max": 90 },
+    "requirements": { "strength": 15, "dexterity": 15 },
+    "maxSockets": 4
+  },
+  {
+    "id": "war_axe",
+    "name": "War Axe",
+    "slot": "main_hand",
+    "subtype": "two_hand_melee",
+    "implicit": { "statKey": "increased_physical_damage", "value": 10, "label": "+10% increased damage" },
+    "damageRange": { "min": 40, "max": 80 },
+    "critChance": 5,
+    "attackSpeed": 1.3,
+    "requirements": { "strength": 30 },
+    "maxSockets": 4
+  },
+  {
+    "id": "hunting_bow",
+    "name": "Hunting Bow",
+    "slot": "main_hand",
+    "subtype": "two_hand_ranged",
+    "implicit": { "statKey": "projectile_speed", "value": 15, "label": "+15% projectile speed" },
+    "damageRange": { "min": 25, "max": 45 },
+    "critChance": 6,
+    "attackSpeed": 1.6,
+    "requirements": { "dexterity": 25 },
+    "maxSockets": 3
+  },
+  {
+    "id": "tower_shield",
+    "name": "Tower Shield",
+    "slot": "off_hand",
+    "subtype": "shield",
+    "implicit": { "statKey": "block_chance", "value": 8, "label": "+8 Block chance" },
+    "armourRange": { "min": 100, "max": 100 },
+    "requirements": { "strength": 20 },
+    "maxSockets": 0
+  }
+]

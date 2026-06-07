@@ -1,0 +1,62 @@
+[
+  {
+    "zoneId": "ashvale_town",
+    "displayName": "Ashvale Refuge",
+    "act": 1,
+    "zoneLevel": 1,
+    "tileset": "town",
+    "layoutType": "open",
+    "size": "small",
+    "enemyRoster": [],
+    "rareEnemyChance": 0,
+    "magicEnemyChance": 0,
+    "density": "low",
+    "pois": { "boss": false, "shrines": { "min": 0, "max": 0 }, "chests": { "min": 0, "max": 0 } },
+    "ambientColour": "#2a2a1a",
+    "musicTrack": "town_ambient",
+    "connections": ["ashvale_forest"],
+    "isTown": true
+  },
+  {
+    "zoneId": "ashvale_forest",
+    "displayName": "Ashvale Dark Forest",
+    "act": 1,
+    "zoneLevel": 2,
+    "tileset": "forest_dark",
+    "layoutType": "branching",
+    "size": "medium",
+    "enemyRoster": [
+      { "enemyId": "scabrous_rat", "weight": 35 },
+      { "enemyId": "hollow_husk", "weight": 40 },
+      { "enemyId": "grave_archer", "weight": 25 }
+    ],
+    "rareEnemyChance": 0.02,
+    "magicEnemyChance": 0.12,
+    "density": "medium",
+    "pois": { "boss": false, "shrines": { "min": 0, "max": 2 }, "chests": { "min": 1, "max": 3 } },
+    "ambientColour": "#1a2a1a",
+    "musicTrack": "forest_dark_ambient",
+    "connections": ["ashvale_town", "ashvale_ruins"]
+  },
+  {
+    "zoneId": "ashvale_ruins",
+    "displayName": "Ashvale Ruins",
+    "act": 1,
+    "zoneLevel": 4,
+    "tileset": "ruins",
+    "layoutType": "linear",
+    "size": "medium",
+    "enemyRoster": [
+      { "enemyId": "hollow_husk", "weight": 30 },
+      { "enemyId": "grave_archer", "weight": 30 },
+      { "enemyId": "scabrous_rat", "weight": 20 }
+    ],
+    "rareEnemyChance": 0.03,
+    "magicEnemyChance": 0.15,
+    "density": "high",
+    "pois": { "boss": true, "shrines": { "min": 0, "max": 1 }, "chests": { "min": 1, "max": 2 } },
+    "ambientColour": "#1a1a2a",
+    "musicTrack": "ruins_ambient",
+    "connections": ["ashvale_forest"]
+  }
+]

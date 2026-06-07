@@ -1,0 +1,122 @@
+[
+  {
+    "id": "crushing_blow",
+    "name": "Crushing Blow",
+    "classId": "ironclad",
+    "slot": "basic",
+    "resourceCost": 0,
+    "resourceGenerated": 5,
+    "cooldown": 0,
+    "damageMultiplier": 1.1,
+    "skillType": "melee",
+    "description": "Melee swing in front of player. 110% weapon damage. Knockback small enemies."
+  },
+  {
+    "id": "seismic_slam",
+    "name": "Seismic Slam",
+    "classId": "ironclad",
+    "slot": "q",
+    "resourceCost": 30,
+    "resourceGenerated": 0,
+    "cooldown": 3,
+    "damageMultiplier": 1.5,
+    "skillType": "aoe",
+    "description": "Ground slam. Shockwave travels forward 3 tiles. 150% weapon damage in line."
+  },
+  {
+    "id": "iron_fortress",
+    "name": "Iron Fortress",
+    "classId": "ironclad",
+    "slot": "e",
+    "resourceCost": 40,
+    "resourceGenerated": 0,
+    "cooldown": 6,
+    "damageMultiplier": 0,
+    "skillType": "buff",
+    "description": "2-second shield absorbing up to [Armour × 3] damage. Cannot attack while active."
+  },
+  {
+    "id": "berserker_charge",
+    "name": "Berserker's Charge",
+    "classId": "ironclad",
+    "slot": "r",
+    "resourceCost": 35,
+    "resourceGenerated": 0,
+    "cooldown": 5,
+    "damageMultiplier": 1.8,
+    "skillType": "mobility",
+    "description": "Dash 4 tiles toward cursor. Hit all enemies in path for 180% damage. Brief stun."
+  },
+  {
+    "id": "whirlwind",
+    "name": "Whirlwind",
+    "classId": "ironclad",
+    "slot": "f",
+    "resourceCost": 60,
+    "resourceGenerated": 0,
+    "cooldown": 1,
+    "damageMultiplier": 0.8,
+    "skillType": "aoe",
+    "description": "Spin continuously dealing 80% damage/hit to all nearby enemies. Drains 15 Rage/sec."
+  },
+  {
+    "id": "quickshot",
+    "name": "Quickshot",
+    "classId": "ranger",
+    "slot": "basic",
+    "resourceCost": 0,
+    "resourceGenerated": 3,
+    "cooldown": 0,
+    "damageMultiplier": 1.0,
+    "skillType": "ranged",
+    "description": "Fire an arrow toward cursor. 100% weapon damage. Long range."
+  },
+  {
+    "id": "multishot",
+    "name": "Multishot",
+    "classId": "ranger",
+    "slot": "q",
+    "resourceCost": 25,
+    "resourceGenerated": 0,
+    "cooldown": 3,
+    "damageMultiplier": 0.8,
+    "skillType": "ranged",
+    "description": "Fire 5 arrows in a 30° arc simultaneously. 80% damage each."
+  },
+  {
+    "id": "explosive_arrow",
+    "name": "Explosive Arrow",
+    "classId": "ranger",
+    "slot": "e",
+    "resourceCost": 35,
+    "resourceGenerated": 0,
+    "cooldown": 5,
+    "damageMultiplier": 2.0,
+    "skillType": "ranged",
+    "description": "Fires an arrow that embeds and detonates after 0.5 sec. 200% AoE damage in 2-tile radius."
+  },
+  {
+    "id": "vaulting_escape",
+    "name": "Vaulting Escape",
+    "classId": "ranger",
+    "slot": "r",
+    "resourceCost": 20,
+    "resourceGenerated": 0,
+    "cooldown": 4,
+    "damageMultiplier": 0,
+    "skillType": "mobility",
+    "description": "Backflip 3 tiles away from cursor. Brief invulnerability (0.3 sec) during leap."
+  },
+  {
+    "id": "rain_of_arrows",
+    "name": "Rain of Arrows",
+    "classId": "ranger",
+    "slot": "f",
+    "resourceCost": 50,
+    "resourceGenerated": 0,
+    "cooldown": 8,
+    "damageMultiplier": 1.2,
+    "skillType": "aoe",
+    "description": "Mark a 4x4 tile area. After 1 sec, 12 arrows rain down over 2 seconds. 120% each."
+  }
+]

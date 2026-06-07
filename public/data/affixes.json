@@ -1,0 +1,112 @@
+[
+  {
+    "id": "cruel",
+    "name": "Cruel",
+    "type": "prefix",
+    "tier": 3,
+    "weight": 100,
+    "statKey": "physical_damage_added",
+    "minValue": 15,
+    "maxValue": 25,
+    "conflicts": ["tyrannical", "vicious"]
+  },
+  {
+    "id": "tyrannical",
+    "name": "Tyrannical",
+    "type": "prefix",
+    "tier": 5,
+    "weight": 20,
+    "statKey": "physical_damage_added",
+    "minValue": 30,
+    "maxValue": 50,
+    "conflicts": ["cruel", "vicious"]
+  },
+  {
+    "id": "stalwart",
+    "name": "Stalwart",
+    "type": "prefix",
+    "tier": 2,
+    "weight": 200,
+    "statKey": "max_health",
+    "minValue": 40,
+    "maxValue": 80,
+    "conflicts": ["veteran", "hearty"]
+  },
+  {
+    "id": "veteran",
+    "name": "Veteran",
+    "type": "prefix",
+    "tier": 4,
+    "weight": 80,
+    "statKey": "max_health",
+    "minValue": 90,
+    "maxValue": 150,
+    "conflicts": ["stalwart", "hearty"]
+  },
+  {
+    "id": "durable",
+    "name": "Durable",
+    "type": "suffix",
+    "tier": 1,
+    "weight": 150,
+    "statKey": "armour_percent",
+    "minValue": 10,
+    "maxValue": 15,
+    "conflicts": ["reinforced"]
+  },
+  {
+    "id": "reinforced",
+    "name": "Reinforced",
+    "type": "suffix",
+    "tier": 3,
+    "weight": 60,
+    "statKey": "armour_percent",
+    "minValue": 20,
+    "maxValue": 30,
+    "conflicts": ["durable"]
+  },
+  {
+    "id": "resistant",
+    "name": "Resistant",
+    "type": "suffix",
+    "tier": 3,
+    "weight": 100,
+    "statKey": "fire_resistance",
+    "minValue": 15,
+    "maxValue": 25,
+    "conflicts": ["insulated", "grounded"]
+  },
+  {
+    "id": "athlete",
+    "name": "Athlete's",
+    "type": "suffix",
+    "tier": 2,
+    "weight": 80,
+    "statKey": "move_speed_percent",
+    "minValue": 8,
+    "maxValue": 15,
+    "conflicts": ["sprinter"]
+  },
+  {
+    "id": "deadly",
+    "name": "Deadly",
+    "type": "suffix",
+    "tier": 4,
+    "weight": 40,
+    "statKey": "crit_multiplier_percent",
+    "minValue": 20,
+    "maxValue": 30,
+    "conflicts": ["merciless"]
+  },
+  {
+    "id": "accurate",
+    "name": "Accurate",
+    "type": "suffix",
+    "tier": 2,
+    "weight": 120,
+    "statKey": "accuracy",
+    "minValue": 50,
+    "maxValue": 100,
+    "conflicts": ["precise"]
+  }
+]
