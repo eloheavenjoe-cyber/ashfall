@@ -14,7 +14,7 @@ export class InventoryUIScene extends Phaser.Scene {
 
   private inventorySystem!: InventorySystem;
   private playerSystem!: PlayerSystem;
-  private registry!: GameRegistry;
+  private gameRegistry!: GameRegistry;
 
   private inventoryVisible = false;
   private characterVisible = false;
@@ -73,7 +73,7 @@ export class InventoryUIScene extends Phaser.Scene {
   init(data: { inventorySystem: InventorySystem; playerSystem: PlayerSystem; registry: GameRegistry }): void {
     this.inventorySystem = data.inventorySystem;
     this.playerSystem = data.playerSystem;
-    this.registry = data.registry;
+    this.gameRegistry = data.registry;
     this.inventoryVisible = false;
     this.characterVisible = false;
   }
