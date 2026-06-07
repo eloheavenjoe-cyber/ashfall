@@ -4,6 +4,7 @@ import { MainMenuScene } from './scenes/MainMenuScene';
 import { ClassSelectScene } from './scenes/ClassSelectScene';
 import { GameScene } from './scenes/GameScene';
 import { DebugOverlayScene } from './scenes/DebugOverlayScene';
+import { InventoryUIScene } from './scenes/InventoryUIScene';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.WEBGL,
@@ -11,7 +12,7 @@ const config: Phaser.Types.Core.GameConfig = {
   height: 1080,
   backgroundColor: '#0a0a0a',
   parent: 'game-container',
-  scene: [BootScene, MainMenuScene, ClassSelectScene, GameScene, DebugOverlayScene],
+  scene: [BootScene, MainMenuScene, ClassSelectScene, GameScene, DebugOverlayScene, InventoryUIScene],
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,

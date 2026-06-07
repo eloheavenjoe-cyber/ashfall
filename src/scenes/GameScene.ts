@@ -10,6 +10,7 @@ import { HitFeedbackSystem } from '../systems/HitFeedbackSystem';
 import { LootSystem } from '../systems/LootSystem';
 import { InventorySystem } from '../systems/InventorySystem';
 import { DebugOverlayScene } from './DebugOverlayScene';
+import { InventoryUIScene } from './InventoryUIScene';
 
 const logger = Logger.forSystem('GAME');
 
@@ -69,6 +70,11 @@ export class GameScene extends Phaser.Scene {
 
     this.systemManager.fireSceneReady();
     this.scene.launch(DebugOverlayScene.KEY);
+    this.scene.launch(InventoryUIScene.KEY, {
+      inventorySystem,
+      playerSystem,
+      registry: this.gameRegistry,
+    });
     logger.info('Game scene ready');
   }
 
