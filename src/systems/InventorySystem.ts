@@ -178,4 +178,77 @@ export class InventorySystem implements ISystem {
     if (idx === InventorySystem.EMPTY) return null;
     return this.stored[idx].item;
   }
+
+  private getTargetSlots(itemSlot: string): EquipmentSlotId[] {
+    switch (itemSlot) {
+      case 'main_hand': return ['main_hand'];
+      case 'off_hand': return ['off_hand'];
+      case 'body': return ['body'];
+      case 'helm': return ['helm'];
+      case 'gloves': return ['gloves'];
+      case 'boots': return ['boots'];
+      case 'ring': return ['ring_1', 'ring_2'];
+      case 'amulet': return ['amulet'];
+      case 'belt': return ['belt'];
+      default: return [];
+    }
+  }
+
+  equipItem(itemId: string): boolean {
+    const found = this.findStored(itemId);
+    if (!found) return false;
+    const { stored, idx } = found;
+    const targetSlots = this.getTargetSlots(stored.item.slot);
+    if (targetSlots.length === 0) return false;
+
+    let targetSlot: EquipmentSlotId | null = null;
+    let occupiedBy: Item | null = null;
+    for (const slotId of targetSlots) {
+      const current = this.equipmentMap.get(slotId) ?? null;
+      if (current === null) {
+        targetSlot = slotId;
+        occupiedBy = null;
+        break;
+      }
+      targetSlot = slotId;
+      occupiedBy = current;
+    }
+    if (!targetSlot) return false;
+
+    if (occupiedBy) {
+      const swapped = this.unequipItem(targetSlot);
+      if (!swapped) return false;
+    }
+
+    this.deoccupy(stored);
+    this.stored.splice(idx, 1);
+    this.occupancy.fill(InventorySystem.EMPTY);
+    for (let i = 0; i < this.stored.length; i++) {
+      const s = this.stored[i];
+      for (let r = s.originRow; r < s.originRow + s.item.gridH; r++) {
+        for (let c = s.originCol; c < s.originCol + s.item.gridW; c++) {
+          this.occupancy[this.toIndex(c, r)] = i;
+        }
+      }
+    }
+
+    this.equipmentMap.set(targetSlot, stored.item);
+    return true;
+  }
+
+  unequipItem(slotId: EquipmentSlotId): boolean {
+    const item = this.equipmentMap.get(slotId) ?? null;
+    if (!item) return false;
+
+    const slot = this.findSlot(item);
+    if (!slot) return false;
+
+    this.equipmentMap.set(slotId, null);
+    this.occupy(item, slot.col, slot.row);
+    return true;
+  }
+
+  addGold(amount: number): void {
+    this.goldAmount = Math.min(this.goldAmount + amount, 9_999_999);
+  }
 }

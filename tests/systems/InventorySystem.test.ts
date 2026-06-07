@@ -190,4 +190,136 @@ describe('InventorySystem', () => {
     // 2-wide item at col 3 → cols 3 and 4 → valid
     expect(system.canPlaceAt(body, 3, 0)).toBe(true);
   });
+
+  describe('equipment', () => {
+    let eqSystem: InventorySystem;
+    let eqRegistry: GameRegistry;
+
+    function makeFullRegistry(): GameRegistry {
+      const r = new GameRegistry();
+      r.items.register('iron_plate', {
+        id: 'iron_plate', name: 'Iron Plate', slot: 'body', subtype: 'armour',
+        implicit: null, requirements: { strength: 25 }, maxSockets: 0,
+      });
+      r.items.register('copper_ring', {
+        id: 'copper_ring', name: 'Copper Ring', slot: 'ring', subtype: 'ring',
+        implicit: null, requirements: {}, maxSockets: 0,
+      });
+      r.items.register('war_axe', {
+        id: 'war_axe', name: 'War Axe', slot: 'main_hand', subtype: 'two_hand_melee',
+        implicit: null, requirements: { strength: 30 }, maxSockets: 0,
+      });
+      r.items.register('tower_shield', {
+        id: 'tower_shield', name: 'Tower Shield', slot: 'off_hand', subtype: 'shield',
+        implicit: null, requirements: {}, maxSockets: 0,
+      });
+      r.items.register('leather_belt', {
+        id: 'leather_belt', name: 'Leather Belt', slot: 'belt', subtype: 'belt',
+        implicit: null, requirements: {}, maxSockets: 0,
+      });
+      r.affixes.register('test_prefix', {
+        id: 'test_prefix', name: 'Test', type: 'prefix', tier: 1, weight: 100,
+        statKey: 'armour', minValue: 10, maxValue: 20, conflicts: [],
+      });
+      return r;
+    }
+
+    beforeEach(() => {
+      eqSystem = new InventorySystem();
+      eqSystem.init({});
+      eqRegistry = makeFullRegistry();
+    });
+
+    it('equips body item to body slot', () => {
+      const item = generateItem('iron_plate', 1, 'normal', eqRegistry);
+      eqSystem.addItem(item);
+      const result = eqSystem.equipItem(item.id);
+      expect(result).toBe(true);
+      expect(eqSystem.getEquipment().get('body')).toBe(item);
+      expect(eqSystem.getItemAtCell(0, 0)).toBeNull();
+    });
+
+    it('does not equip to mismatched slot', () => {
+      const item = generateItem('iron_plate', 1, 'normal', eqRegistry);
+      eqSystem.addItem(item);
+      const result = eqSystem.unequipItem('off_hand');
+      expect(result).toBe(false);
+    });
+
+    it('equips ring to ring_1 when ring_1 is empty', () => {
+      const item = generateItem('copper_ring', 1, 'normal', eqRegistry);
+      eqSystem.addItem(item);
+      const result = eqSystem.equipItem(item.id);
+      expect(result).toBe(true);
+      expect(eqSystem.getEquipment().get('ring_1')).toBe(item);
+      expect(eqSystem.getEquipment().get('ring_2')).toBeNull();
+    });
+
+    it('equips ring to ring_2 when ring_1 is occupied', () => {
+      const ring1 = generateItem('copper_ring', 1, 'normal', eqRegistry);
+      const ring2 = generateItem('copper_ring', 1, 'normal', eqRegistry);
+      eqSystem.addItem(ring1);
+      eqSystem.addItem(ring2);
+      eqSystem.equipItem(ring1.id);
+      const result = eqSystem.equipItem(ring2.id);
+      expect(result).toBe(true);
+      expect(eqSystem.getEquipment().get('ring_2')).toBe(ring2);
+    });
+
+    it('unequipItem moves item back to inventory', () => {
+      const item = generateItem('copper_ring', 1, 'normal', eqRegistry);
+      eqSystem.addItem(item);
+      eqSystem.equipItem(item.id);
+      const result = eqSystem.unequipItem('ring_1');
+      expect(result).toBe(true);
+      expect(eqSystem.getEquipment().get('ring_1')).toBeNull();
+      const slots = eqSystem.getInventorySlots();
+      expect(slots.some(s => s?.id === item.id)).toBe(true);
+    });
+
+    it('unequipItem fails when inventory is full', () => {
+      const ring = generateItem('copper_ring', 1, 'normal', eqRegistry);
+      eqSystem.addItem(ring);
+      eqSystem.equipItem(ring.id);
+      for (let i = 0; i < 40; i++) {
+        eqSystem.addItem(generateItem('copper_ring', 1, 'normal', eqRegistry));
+      }
+      const result = eqSystem.unequipItem('ring_1');
+      expect(result).toBe(false);
+      expect(eqSystem.getEquipment().get('ring_1')).toBe(ring);
+    });
+
+    it('equipItem with occupied slot swaps items', () => {
+      const body1 = generateItem('iron_plate', 1, 'normal', eqRegistry);
+      const body2 = generateItem('iron_plate', 1, 'normal', eqRegistry);
+      eqSystem.addItem(body1);
+      eqSystem.addItem(body2);
+      eqSystem.equipItem(body1.id);
+      const result = eqSystem.equipItem(body2.id);
+      expect(result).toBe(true);
+      expect(eqSystem.getEquipment().get('body')).toBe(body2);
+      const slots = eqSystem.getInventorySlots();
+      expect(slots.some(s => s?.id === body1.id)).toBe(true);
+    });
+
+    it('addGold increases gold', () => {
+      eqSystem.addGold(100);
+      expect(eqSystem.getGold()).toBe(100);
+      eqSystem.addGold(50);
+      expect(eqSystem.getGold()).toBe(150);
+    });
+
+    it('addGold caps at 9,999,999', () => {
+      eqSystem.addGold(10_000_000);
+      expect(eqSystem.getGold()).toBe(9_999_999);
+    });
+
+    it('equips belt item to belt slot', () => {
+      const item = generateItem('leather_belt', 1, 'normal', eqRegistry);
+      eqSystem.addItem(item);
+      const result = eqSystem.equipItem(item.id);
+      expect(result).toBe(true);
+      expect(eqSystem.getEquipment().get('belt')).toBe(item);
+    });
+  });
 });
