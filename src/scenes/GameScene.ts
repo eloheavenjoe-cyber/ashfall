@@ -4,6 +4,9 @@ import { SystemManager } from '../core/SystemManager';
 import type { GameRegistry } from '../core/GameRegistry';
 import { InputSystem } from '../systems/InputSystem';
 import { PlayerSystem } from '../systems/PlayerSystem';
+import { EnemySystem } from '../systems/EnemySystem';
+import { CombatSystem } from '../systems/CombatSystem';
+import { HitFeedbackSystem } from '../systems/HitFeedbackSystem';
 import { DebugOverlayScene } from './DebugOverlayScene';
 
 const logger = Logger.forSystem('GAME');
@@ -14,7 +17,6 @@ export class GameScene extends Phaser.Scene {
   private gameRegistry!: GameRegistry;
   private classId!: string;
   private systemManager!: SystemManager;
-  private tileMapGroup!: Phaser.GameObjects.Group;
 
   constructor() {
     super({ key: GameScene.KEY });
@@ -24,31 +26,41 @@ export class GameScene extends Phaser.Scene {
     this.gameRegistry = data.registry;
     this.classId = data.classId || 'ironclad';
     this.systemManager = new SystemManager();
-    this.tileMapGroup = this.add.group();
   }
 
   create(): void {
     logger.info('Game scene creating', { classId: this.classId });
 
     this.cameras.main.setBackgroundColor('#0a0a0a');
+    this.cameras.main.setBounds(-Infinity, -Infinity, Infinity, Infinity);
 
     this.createIsometricGrid();
 
     const inputSystem = new InputSystem();
     const playerSystem = new PlayerSystem();
+    const enemySystem = new EnemySystem();
+    const combatSystem = new CombatSystem();
+    const hitFeedbackSystem = new HitFeedbackSystem();
 
     this.systemManager.add(inputSystem);
     this.systemManager.add(playerSystem);
+    this.systemManager.add(enemySystem);
+    this.systemManager.add(combatSystem);
+    this.systemManager.add(hitFeedbackSystem);
 
     this.systemManager.initAll({
       scene: this,
       registry: this.gameRegistry,
       classId: this.classId,
       inputSystem,
+      playerSystem,
+      enemySystem,
+      combatSystem,
     });
 
-    this.systemManager.fireSceneReady();
+    enemySystem.spawnEnemies(960, 540);
 
+    this.systemManager.fireSceneReady();
     this.scene.launch(DebugOverlayScene.KEY);
     logger.info('Game scene ready');
   }
@@ -60,29 +72,30 @@ export class GameScene extends Phaser.Scene {
 
   shutdown(): void {
     this.systemManager.destroyAll();
-    this.tileMapGroup.clear(true, true);
     this.gameRegistry = null as any;
   }
 
   private createIsometricGrid(): void {
+    const COLS = 80;
+    const ROWS = 80;
     const TILE_W = 64;
     const TILE_H = 32;
-    const COLS = 40;
-    const ROWS = 40;
     const ORIGIN_X = 960;
     const ORIGIN_Y = 200;
 
+    const g = this.add.graphics();
+    g.setDepth(-100000);
+
     for (let row = 0; row < ROWS; row++) {
       for (let col = 0; col < COLS; col++) {
-        const worldX = (col - row) * (TILE_W / 2) + ORIGIN_X;
-        const worldY = (col + row) * (TILE_H / 2) + ORIGIN_Y;
+        const wx = (col - row) * (TILE_W / 2) + ORIGIN_X;
+        const wy = (col + row) * (TILE_H / 2) + ORIGIN_Y;
 
         const shade = ((row + col) % 2 === 0) ? 0x2a2a2a : 0x333333;
-        const tile = this.add.rectangle(worldX, worldY, TILE_W, TILE_H, shade, 0.5);
-        tile.setStrokeStyle(1, 0x444444, 0.3);
-        tile.setDepth(worldY);
-
-        this.tileMapGroup.add(tile);
+        g.fillStyle(shade, 0.5);
+        g.fillRect(wx - TILE_W / 2, wy - TILE_H / 2, TILE_W, TILE_H);
+        g.lineStyle(1, 0x444444, 0.3);
+        g.strokeRect(wx - TILE_W / 2, wy - TILE_H / 2, TILE_W, TILE_H);
       }
     }
   }

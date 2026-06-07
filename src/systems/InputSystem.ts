@@ -30,6 +30,8 @@ export class InputSystem implements ISystem {
 
   private lastDirX = 0;
   private lastDirY = 0;
+  private attacking = false;
+  private attackPressedThisFrame = false;
 
   init(config?: { scene: Phaser.Scene }): void {
     this.scene = config!.scene;
@@ -62,6 +64,10 @@ export class InputSystem implements ISystem {
       worldPoint.x - this.scene.cameras.main.scrollX - this.scene.cameras.main.width / 2
     );
 
+    const wasAttacking = this.attacking;
+    this.attacking = pointer.leftButtonDown();
+    this.attackPressedThisFrame = this.attacking && !wasAttacking;
+
     if (this.state.isMoving && (dx !== this.lastDirX || dy !== this.lastDirY)) {
       this.lastDirX = dx;
       this.lastDirY = dy;
@@ -91,5 +97,13 @@ export class InputSystem implements ISystem {
 
   getAimAngle(): number {
     return this.state.aimAngle;
+  }
+
+  isAttacking(): boolean {
+    return this.attacking;
+  }
+
+  wasAttackPressedThisFrame(): boolean {
+    return this.attackPressedThisFrame;
   }
 }
