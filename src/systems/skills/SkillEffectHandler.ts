@@ -13,6 +13,7 @@ export interface SkillContext {
   playerX: number;
   playerY: number;
   aimAngle: number;
+  addEffect(effect: { update(delta: number): void; destroy(): void }): void;
 }
 
 export interface SkillEffectHandler {

@@ -136,6 +136,7 @@ export class SkillSystem implements ISystem {
 
     const handler = this.handlers.get(skill.skillType);
     if (handler) {
+      const self = this;
       const ctx: SkillContext = {
         scene: this.scene,
         playerSystem: this.playerSystem,
@@ -145,6 +146,7 @@ export class SkillSystem implements ISystem {
         playerX: player.position.x,
         playerY: player.position.y,
         aimAngle: this.inputSystem.getAimAngle(),
+        addEffect(effect) { self.activeEffects.push(effect); },
       };
       handler.execute(ctx);
     }
