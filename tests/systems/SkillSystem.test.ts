@@ -83,8 +83,8 @@ describe('SkillSystem', () => {
     expect(system.getShield()).toBe(0);
   });
 
-  it('cooldown is set for skill with cooldown > 0', () => {
-    // As a sanity check: verify we can read cooldown state
+  it('can read cooldown values for all slots', () => {
     expect(system.getCooldown('r')).toBe(0);
+    expect(system.getCooldown('q')).toBe(0);
   });
 });
