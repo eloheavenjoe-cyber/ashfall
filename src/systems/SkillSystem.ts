@@ -142,6 +142,7 @@ export class SkillSystem implements ISystem {
         playerSystem: this.playerSystem,
         enemySystem: this.enemySystem,
         registry: this.registry,
+        skillSystem: this,
         skill,
         playerX: player.position.x,
         playerY: player.position.y,

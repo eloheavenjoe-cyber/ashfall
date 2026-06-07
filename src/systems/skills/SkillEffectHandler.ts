@@ -3,12 +3,14 @@ import type { PlayerSystem } from '../../systems/PlayerSystem';
 import type { EnemySystem } from '../../systems/EnemySystem';
 import type { GameRegistry } from '../../core/GameRegistry';
 import type { SkillConfig } from '../../data/dataConfigs';
+import type { SkillSystem } from '../../systems/SkillSystem';
 
 export interface SkillContext {
   scene: Phaser.Scene;
   playerSystem: PlayerSystem;
   enemySystem: EnemySystem;
   registry: GameRegistry;
+  skillSystem: SkillSystem;
   skill: SkillConfig;
   playerX: number;
   playerY: number;
