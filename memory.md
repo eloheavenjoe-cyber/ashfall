@@ -110,7 +110,13 @@ public/data/    — 8 JSON config files
 tests/          — 84 tests across 8 test files
 ```
 
+### Phase 1.4.2 — Inventory & Equip UI (Completed)
+- **InventorySystem** (`src/systems/InventorySystem.ts`): 40-slot grid (5×8), variable item sizes, occupancy-based placement, equip/unequip with slot matching, gold
+- **InventoryUIScene** (`src/scenes/InventoryUIScene.ts`): Centered inventory panel with rarity-colored items, character sheet with 10 equipment slots + player stats, floating tooltips with affix/requirements display
+- **Interaction**: `I` toggles inventory, `C` toggles character sheet, drag-drop + click-select, game pauses when panels open
+- **PlayerEntity**: Added `strength`, `dexterity`, `intelligence`, `armour`, `evasion` fields populated from class config
+- **Tests**: 32 new tests for grid math, placement, equip/unequip
+
 ### Remaining Phases
-- **1.4.2** — Inventory & Equip UI (grid, drag, tooltips, character sheet)
 - **1.4.3** — HUD (health/resource globes, XP bar, potion belt)
 - **1.5** — Polish & Progression (class skills, XP/leveling, full HUD, save/load)
