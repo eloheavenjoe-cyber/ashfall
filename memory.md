@@ -123,5 +123,14 @@ tests/          — 84 tests across 8 test files
 - **Panel reposition**: Inventory opens left half (cx=480), character sheet right half (cx=1440) — no overlap
 - **Integration**: Launched alongside GameScene, reads PlayerSystem/InventorySystem each frame
 
+### Phase 1.5 — Skill Activation (Phase 1.5.1 Completed)
+- **SkillSystem** (`src/systems/SkillSystem.ts`): 5-slot hotkey mapping (Q/E/R/F), cooldown tracking, resource cost validation, shield state, channeled skill management, per-type handler dispatch
+- **7 Skill Handlers** (`src/systems/skills/*.ts`): MeleeSkill (cone+knockback), ProjectileSkill (single/multi/delayed AoE), AoELineSkill (moving shockwave), AoETargetSkill (targeted rain), MobilitySkill (dash/backflip), BuffSkill (shield), ChanneledSkill (spin drain)
+- **InputSystem**: Added Q/E/R/F key bindings + getters
+- **Shared combat utility** (`src/utils/combatHelper.ts`): `applyDamageToTarget` extracted from CombatSystem
+- **10 skills** fully implemented across Ironclad and Ranger: Crushing Blow, Seismic Slam, Iron Fortress, Berserker's Charge, Whirlwind, Quickshot, Multishot, Explosive Arrow, Vaulting Escape, Rain of Arrows
+
 ### Remaining Phases
-- **1.5** — Polish & Progression (class skills, XP/leveling, full HUD, save/load)
+- **1.5.2** — XP & Leveling
+- **1.5.3** — Skill Bar HUD
+- **1.5.4** — Save/Load
