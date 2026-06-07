@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 import { BootScene } from './scenes/BootScene';
+import { MainMenuScene } from './scenes/MainMenuScene';
+import { ClassSelectScene } from './scenes/ClassSelectScene';
 import { GameScene } from './scenes/GameScene';
 import { DebugOverlayScene } from './scenes/DebugOverlayScene';
 
@@ -9,7 +11,7 @@ const config: Phaser.Types.Core.GameConfig = {
   height: 1080,
   backgroundColor: '#0a0a0a',
   parent: 'game-container',
-  scene: [BootScene, GameScene, DebugOverlayScene],
+  scene: [BootScene, MainMenuScene, ClassSelectScene, GameScene, DebugOverlayScene],
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,

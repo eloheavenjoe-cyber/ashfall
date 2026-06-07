@@ -12,6 +12,15 @@ interface Subscriber {
 }
 
 export class EventBus {
+  private static instance: EventBus;
+
+  static getInstance(): EventBus {
+    if (!EventBus.instance) {
+      EventBus.instance = new EventBus();
+    }
+    return EventBus.instance;
+  }
+
   private subscribers = new Map<string, Subscriber[]>();
 
   on(event: GameEvent, handler: EventHandler, context?: object): void {

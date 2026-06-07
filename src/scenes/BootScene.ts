@@ -12,21 +12,29 @@ export class BootScene extends Phaser.Scene {
     super({ key: BootScene.KEY });
   }
 
-  async create(): Promise<void> {
+  create(): void {
     logger.info('Boot sequence started');
+
+    this.cameras.main.setBackgroundColor('#0a0a0a');
+    const loadingText = this.add.text(960, 540, 'Loading...', {
+      color: '#888888',
+      fontSize: '24px',
+      fontFamily: 'monospace',
+    }).setOrigin(0.5);
 
     const registry = new GameRegistry();
 
-    try {
-      await loadAllData(registry as any);
-      logger.info('Data loaded, starting game');
-    } catch (err) {
-      logger.fatal('Failed to load game data', { error: String(err) });
-      this.showFatalError(err);
-      return;
-    }
-
-    this.scene.start('GameScene', { registry });
+    loadAllData(registry as any)
+      .then(() => {
+        logger.info('Data loaded, starting menu');
+        loadingText.destroy();
+        this.scene.start('MainMenuScene', { registry });
+      })
+      .catch((err) => {
+        logger.fatal('Failed to load game data', { error: String(err) });
+        loadingText.destroy();
+        this.showFatalError(err);
+      });
   }
 
   private showFatalError(err: unknown): void {
