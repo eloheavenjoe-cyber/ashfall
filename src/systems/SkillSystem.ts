@@ -30,9 +30,9 @@ export class SkillSystem implements ISystem {
 
   private activeEffects: { update(delta: number): void; destroy(): void }[] = [];
 
-  shieldRemaining = 0;
-  shieldTimer = 0;
-  isChannelling = false;
+  private shieldRemaining = 0;
+  private shieldTimer = 0;
+  private isChannelling = false;
   private channelSlot: SkillSlot | null = null;
 
   private handlers = new Map<string, SkillEffectHandler>();
@@ -112,6 +112,7 @@ export class SkillSystem implements ISystem {
   private checkActivation(slot: SkillSlot): void {
     const skill = this.skillSlots.get(slot);
     if (!skill) return;
+    if (this.isChannelling) return;
 
     const isPressed = (() => {
       switch (slot) {
@@ -177,4 +178,6 @@ export class SkillSystem implements ISystem {
   }
 
   getShield(): number { return this.shieldRemaining; }
+  getShieldTimer(): number { return this.shieldTimer; }
+  getIsChannelling(): boolean { return this.isChannelling; }
 }
