@@ -298,6 +298,13 @@ export class HUDScene extends Phaser.Scene {
         this.skillCostTexts[i].setColor(costColor);
         this.skillCostTexts[i].setVisible(true);
 
+        if (player.resource < skill.resourceCost) {
+          iconG.clear();
+          iconG.fillStyle(color, 0.2);
+          iconG.fillRoundedRect(this.skillIconRects[i].x, this.skillIconRects[i].y, w - 16, 30, 3);
+          this.skillCostTexts[i].setColor('#ff4444');
+        }
+
         if (cooldown > 0) {
           const cdRatio = skill.cooldown > 0 ? cooldown / skill.cooldown : 0;
           const overlayH = Math.round(h * cdRatio);
