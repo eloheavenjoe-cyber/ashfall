@@ -160,6 +160,11 @@ export class SkillSystem implements ISystem {
     EventBus.getInstance().emit(GameEvent.SKILL_USED, { skillId: skill.id, slot });
   }
 
+  setShield(amount: number, timer: number): void {
+    this.shieldRemaining = amount;
+    this.shieldTimer = timer;
+  }
+
   takeShieldDamage(amount: number): number {
     if (this.shieldRemaining <= 0) return amount;
     const absorbed = Math.min(this.shieldRemaining, amount);
