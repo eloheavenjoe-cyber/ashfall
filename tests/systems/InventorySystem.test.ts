@@ -239,10 +239,25 @@ describe('InventorySystem', () => {
       expect(eqSystem.getItemAtCell(0, 0)).toBeNull();
     });
 
-    it('does not equip to mismatched slot', () => {
-      const item = generateItem('iron_plate', 1, 'normal', eqRegistry);
-      eqSystem.addItem(item);
+    it('unequipItem on empty slot returns false', () => {
       const result = eqSystem.unequipItem('off_hand');
+      expect(result).toBe(false);
+    });
+
+    it('equipItem with item not in inventory returns false', () => {
+      const result = eqSystem.equipItem('nonexistent_id');
+      expect(result).toBe(false);
+    });
+
+    it('equipItem with unknown item slot returns false', () => {
+      // Register a base with no valid slot mapping
+      eqRegistry.items.register('test_scroll', {
+        id: 'test_scroll', name: 'Test Scroll', slot: 'consumable', subtype: 'scroll',
+        implicit: null, requirements: {}, maxSockets: 0,
+      });
+      const item = generateItem('test_scroll', 1, 'normal', eqRegistry);
+      eqSystem.addItem(item);
+      const result = eqSystem.equipItem(item.id);
       expect(result).toBe(false);
     });
 
@@ -264,6 +279,24 @@ describe('InventorySystem', () => {
       const result = eqSystem.equipItem(ring2.id);
       expect(result).toBe(true);
       expect(eqSystem.getEquipment().get('ring_2')).toBe(ring2);
+    });
+
+    it('equipItem swaps ring_2 when both ring slots are occupied', () => {
+      const ring1 = generateItem('copper_ring', 1, 'normal', eqRegistry);
+      const ring2 = generateItem('copper_ring', 1, 'normal', eqRegistry);
+      const ring3 = generateItem('copper_ring', 1, 'normal', eqRegistry);
+      eqSystem.addItem(ring1);
+      eqSystem.addItem(ring2);
+      eqSystem.addItem(ring3);
+      eqSystem.equipItem(ring1.id);
+      eqSystem.equipItem(ring2.id);
+      // ring3 should swap with ring_2 (last in targetSlots)
+      const result = eqSystem.equipItem(ring3.id);
+      expect(result).toBe(true);
+      // ring2 should be back in inventory
+      const slots = eqSystem.getInventorySlots();
+      expect(slots.some(s => s?.id === ring2.id)).toBe(true);
+      expect(eqSystem.getEquipment().get('ring_2')).toBe(ring3);
     });
 
     it('unequipItem moves item back to inventory', () => {
@@ -312,6 +345,12 @@ describe('InventorySystem', () => {
     it('addGold caps at 9,999,999', () => {
       eqSystem.addGold(10_000_000);
       expect(eqSystem.getGold()).toBe(9_999_999);
+    });
+
+    it('addGold ignores negative amounts', () => {
+      eqSystem.addGold(100);
+      eqSystem.addGold(-50);
+      expect(eqSystem.getGold()).toBe(100);
     });
 
     it('equips belt item to belt slot', () => {

@@ -249,6 +249,7 @@ export class InventorySystem implements ISystem {
   }
 
   addGold(amount: number): void {
+    if (amount < 0) return;
     this.goldAmount = Math.min(this.goldAmount + amount, 9_999_999);
   }
 }
