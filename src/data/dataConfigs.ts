@@ -103,6 +103,14 @@ export interface ClassConfig {
   };
   startingSkillIds: string[];
   passives: string[];
+  baseStatsPerLevel?: {
+    health?: number;
+    strength?: number;
+    dexterity?: number;
+    intelligence?: number;
+    armour?: number;
+    evasion?: number;
+  };
 }
 
 export interface ZoneConfig {

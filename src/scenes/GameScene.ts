@@ -17,6 +17,7 @@ import { AoETargetSkill } from '../systems/skills/AoETargetSkill';
 import { MobilitySkill } from '../systems/skills/MobilitySkill';
 import { BuffSkill } from '../systems/skills/BuffSkill';
 import { ChanneledSkill } from '../systems/skills/ChanneledSkill';
+import { LevelingSystem } from '../systems/LevelingSystem';
 import { DebugOverlayScene } from './DebugOverlayScene';
 import { HUDScene } from './HUDScene';
 import { InventoryUIScene } from './InventoryUIScene';
@@ -72,6 +73,8 @@ export class GameScene extends Phaser.Scene {
     this.systemManager.add(lootSystem);
     this.systemManager.add(inventorySystem);
     this.systemManager.add(skillSystem);
+    const levelingSystem = new LevelingSystem();
+    this.systemManager.add(levelingSystem);
 
     this.systemManager.initAll({
       scene: this,
@@ -83,6 +86,7 @@ export class GameScene extends Phaser.Scene {
       combatSystem,
       inventorySystem,
       skillSystem,
+      levelingSystem,
     });
 
     enemySystem.spawnEnemies(960, 540);

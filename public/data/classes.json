@@ -16,7 +16,8 @@
       "critMultiplier": 150
     },
     "startingSkillIds": ["crushing_blow", "seismic_slam", "iron_fortress", "berserker_charge", "whirlwind"],
-    "passives": ["ironclad_start"]
+    "passives": ["ironclad_start"],
+    "baseStatsPerLevel": { "health": 12, "strength": 2, "dexterity": 1, "armour": 1 }
   },
   {
     "id": "ranger",
@@ -35,6 +36,7 @@
       "critMultiplier": 150
     },
     "startingSkillIds": ["quickshot", "multishot", "explosive_arrow", "vaulting_escape", "rain_of_arrows"],
-    "passives": ["ranger_start"]
+    "passives": ["ranger_start"],
+    "baseStatsPerLevel": { "health": 8, "dexterity": 2, "strength": 1, "evasion": 1 }
   }
 ]
