@@ -7,6 +7,7 @@ import { PlayerSystem } from '../systems/PlayerSystem';
 import { EnemySystem } from '../systems/EnemySystem';
 import { CombatSystem } from '../systems/CombatSystem';
 import { HitFeedbackSystem } from '../systems/HitFeedbackSystem';
+import { LootSystem } from '../systems/LootSystem';
 import { DebugOverlayScene } from './DebugOverlayScene';
 
 const logger = Logger.forSystem('GAME');
@@ -41,12 +42,14 @@ export class GameScene extends Phaser.Scene {
     const enemySystem = new EnemySystem();
     const combatSystem = new CombatSystem();
     const hitFeedbackSystem = new HitFeedbackSystem();
+    const lootSystem = new LootSystem();
 
     this.systemManager.add(inputSystem);
     this.systemManager.add(playerSystem);
     this.systemManager.add(enemySystem);
     this.systemManager.add(combatSystem);
     this.systemManager.add(hitFeedbackSystem);
+    this.systemManager.add(lootSystem);
 
     this.systemManager.initAll({
       scene: this,
