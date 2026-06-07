@@ -146,4 +146,48 @@ describe('InventorySystem', () => {
     const moved = system.moveItem(item1.id, 1, 0);
     expect(moved).toBe(false);
   });
+
+  it('moveItem with multi-cell item allows shift that overlaps own cells', () => {
+    const item = generateItem('iron_plate', 1, 'normal', registry);
+    system.addItem(item);
+    // At (0,0), shift right by 1 — overlaps original position
+    const moved = system.moveItem(item.id, 1, 0);
+    expect(moved).toBe(true);
+    expect(system.getItemAtCell(0, 0)).toBeNull();
+    expect(system.getItemAtCell(1, 0)).toBe(item);
+  });
+
+  it('removeItem with nonexistent id returns null', () => {
+    const result = system.removeItem('nonexistent');
+    expect(result).toBeNull();
+  });
+
+  it('removeItem preserves other items after removal', () => {
+    const item1 = generateItem('copper_ring', 1, 'normal', registry);
+    const item2 = generateItem('copper_ring', 1, 'normal', registry);
+    const item3 = generateItem('copper_ring', 1, 'normal', registry);
+    system.addItem(item1);
+    system.addItem(item2);
+    system.addItem(item3);
+    system.removeItem(item2.id);
+    // item1 and item3 should still be there
+    expect(system.getItemAtCell(0, 0)).toBe(item1);
+    expect(system.getItemAtCell(1, 0)).toBeNull();
+    expect(system.getItemAtCell(2, 0)).toBe(item3);
+  });
+
+  it('getItemAtCell returns null for out-of-bounds', () => {
+    expect(system.getItemAtCell(-1, 0)).toBeNull();
+    expect(system.getItemAtCell(5, 0)).toBeNull();
+    expect(system.getItemAtCell(0, -1)).toBeNull();
+    expect(system.getItemAtCell(0, 8)).toBeNull();
+  });
+
+  it('canPlaceAt respects correct column bounds for large items', () => {
+    const body = generateItem('iron_plate', 1, 'normal', registry);
+    // 2-wide item at col 4 → would extend to col 6 → out of bounds
+    expect(system.canPlaceAt(body, 4, 0)).toBe(false);
+    // 2-wide item at col 3 → cols 3 and 4 → valid
+    expect(system.canPlaceAt(body, 3, 0)).toBe(true);
+  });
 });

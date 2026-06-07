@@ -159,8 +159,12 @@ export class InventorySystem implements ISystem {
   moveItem(itemId: string, toCol: number, toRow: number): boolean {
     const found = this.findStored(itemId);
     if (!found) return false;
-    if (!this.canPlaceAt(found.stored.item, toCol, toRow)) return false;
+    // Temporarily deoccupy, then check — allows overlapping original position
     this.deoccupy(found.stored);
+    if (!this.canPlaceAt(found.stored.item, toCol, toRow)) {
+      this.occupy(found.stored.item, found.stored.originCol, found.stored.originRow);
+      return false;
+    }
     found.stored.originCol = toCol;
     found.stored.originRow = toRow;
     this.occupy(found.stored.item, toCol, toRow);
@@ -168,6 +172,8 @@ export class InventorySystem implements ISystem {
   }
 
   getItemAtCell(col: number, row: number): Item | null {
+    if (col < 0 || col >= InventorySystem.COLS) return null;
+    if (row < 0 || row >= InventorySystem.ROWS) return null;
     const idx = this.occupancy[this.toIndex(col, row)];
     if (idx === InventorySystem.EMPTY) return null;
     return this.stored[idx].item;
