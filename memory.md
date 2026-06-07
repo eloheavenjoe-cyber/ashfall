@@ -117,6 +117,11 @@ tests/          — 84 tests across 8 test files
 - **PlayerEntity**: Added `strength`, `dexterity`, `intelligence`, `armour`, `evasion` fields populated from class config
 - **Tests**: 32 new tests for grid math, placement, equip/unequip
 
+### Phase 1.4.3 — HUD (Completed)
+- **HUDScene** (`src/scenes/HUDScene.ts`): HP bar (gradient red), resource bar (rage=orange/stamina=green), XP bar (gold segments), 5-slot potion belt placeholder, gold display
+- **Visual polish**: Drop shadows, gradient fills, specular highlights, rounded corners, outer border + inner bevel on all bars
+- **Panel reposition**: Inventory opens left half (cx=480), character sheet right half (cx=1440) — no overlap
+- **Integration**: Launched alongside GameScene, reads PlayerSystem/InventorySystem each frame
+
 ### Remaining Phases
-- **1.4.3** — HUD (health/resource globes, XP bar, potion belt)
 - **1.5** — Polish & Progression (class skills, XP/leveling, full HUD, save/load)
