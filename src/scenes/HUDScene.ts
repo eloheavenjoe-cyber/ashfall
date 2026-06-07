@@ -102,6 +102,7 @@ export class HUDScene extends Phaser.Scene {
   }
 
   update(): void {
+    this.updateSkillBar();
     const player = this.playerSystem.getPlayer();
     const resourceColors = this.getResourceColors();
 
@@ -168,6 +169,41 @@ export class HUDScene extends Phaser.Scene {
     }
   }
 
+  private getSkillTypeColor(skillType: string): number {
+    switch (skillType) {
+      case 'melee': return 0xff4444;
+      case 'ranged': return 0x44cc44;
+      case 'aoe':
+      case 'aoe_target': return 0xdd8800;
+      case 'buff': return 0x4444ff;
+      case 'mobility': return 0x44ffff;
+      case 'channeled': return 0xcc44cc;
+      default: return 0x888888;
+    }
+  }
+
+  private getSlotX(i: number): number {
+    const slotWidths = [140, 64, 64, 64, 64];
+    const gap = 8;
+    const totalWidth = slotWidths.reduce((a, b) => a + b, 0) + gap * 4;
+    let startX = 960 - totalWidth / 2;
+    for (let j = 0; j < i; j++) startX += slotWidths[j] + gap;
+    return startX;
+  }
+
+  private getSlotWidth(i: number): number {
+    const slotWidths = [140, 64, 64, 64, 64];
+    return slotWidths[i];
+  }
+
+  private getSkillCostColor(resourceType: string): string {
+    switch (resourceType) {
+      case 'rage': return '#ee5500';
+      case 'stamina': return '#55cc44';
+      default: return '#4488ff';
+    }
+  }
+
   private createSkillBar(): void {
     const depth = 200100;
     const slotH = 56;
@@ -228,6 +264,59 @@ export class HUDScene extends Phaser.Scene {
     }).setScrollFactor(0).setDepth(depth + 11).setVisible(false);
 
     logger.info('Skill bar created');
+  }
+
+  private updateSkillBar(): void {
+    const slots: Array<'basic' | 'q' | 'e' | 'r' | 'f'> = ['basic', 'q', 'e', 'r', 'f'];
+    const player = this.playerSystem.getPlayer();
+
+    for (let i = 0; i < 5; i++) {
+      const skillSlot = slots[i];
+      const skill = this.skillSystem.getSkillInSlot(skillSlot);
+      const cooldown = this.skillSystem.getCooldown(skillSlot);
+      const x = this.getSlotX(i);
+      const w = this.getSlotWidth(i);
+      const y = 1080;
+      const h = 56;
+
+      this.drawSkillSlotBg(this.skillSlots[i], x, y, w, h);
+
+      const iconG = this.skillIconRects[i].g;
+      iconG.clear();
+
+      if (skill) {
+        const color = this.getSkillTypeColor(skill.skillType);
+        iconG.fillStyle(color, 0.7);
+        iconG.fillRoundedRect(this.skillIconRects[i].x, this.skillIconRects[i].y, w - 16, 30, 3);
+
+        this.skillNameTexts[i].setText(skill.name);
+        this.skillNameTexts[i].setVisible(true);
+
+        const costColor = this.getSkillCostColor(player.resourceType);
+        this.skillCostTexts[i].setText(`${skill.resourceCost}`);
+        this.skillCostTexts[i].setColor(costColor);
+        this.skillCostTexts[i].setVisible(true);
+
+        if (cooldown > 0) {
+          const cdRatio = skill.cooldown > 0 ? cooldown / skill.cooldown : 0;
+          const overlayH = Math.round(h * cdRatio);
+          this.skillSlots[i].fillStyle(0x000000, 0.6);
+          this.skillSlots[i].fillRect(x, y, w, overlayH);
+          this.skillCdTexts[i].setText(cooldown.toFixed(1));
+          this.skillCdTexts[i].setVisible(true);
+          this.skillNameTexts[i].setVisible(false);
+        } else {
+          this.skillCdTexts[i].setVisible(false);
+          this.skillNameTexts[i].setVisible(true);
+        }
+      } else {
+        iconG.fillStyle(0x1a1a1a);
+        iconG.fillRoundedRect(this.skillIconRects[i].x, this.skillIconRects[i].y, w - 16, 30, 3);
+        this.skillNameTexts[i].setVisible(false);
+        this.skillCostTexts[i].setVisible(false);
+        this.skillCdTexts[i].setVisible(false);
+      }
+    }
   }
 
   private drawSkillSlotBg(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number): void {
