@@ -9,15 +9,17 @@ interface LoadSpec {
   typeName: string;
 }
 
+const BASE = import.meta.env.BASE_URL;
+
 const LOAD_SPECS: LoadSpec[] = [
-  { path: '/data/enemies.json',  registryKey: 'enemies', typeName: 'EnemyConfig' },
-  { path: '/data/items.json',    registryKey: 'items',   typeName: 'ItemBaseConfig' },
-  { path: '/data/affixes.json',  registryKey: 'affixes', typeName: 'AffixConfig' },
-  { path: '/data/skills.json',   registryKey: 'skills',  typeName: 'SkillConfig' },
-  { path: '/data/classes.json',  registryKey: 'classes', typeName: 'ClassConfig' },
-  { path: '/data/zones.json',    registryKey: 'zones',   typeName: 'ZoneConfig' },
-  { path: '/data/currency.json', registryKey: 'currency', typeName: 'CurrencyConfig' },
-  { path: '/data/passives.json', registryKey: 'passives',typeName: 'PassiveNodeConfig' },
+  { path: `${BASE}data/enemies.json`,  registryKey: 'enemies', typeName: 'EnemyConfig' },
+  { path: `${BASE}data/items.json`,    registryKey: 'items',   typeName: 'ItemBaseConfig' },
+  { path: `${BASE}data/affixes.json`,  registryKey: 'affixes', typeName: 'AffixConfig' },
+  { path: `${BASE}data/skills.json`,   registryKey: 'skills',  typeName: 'SkillConfig' },
+  { path: `${BASE}data/classes.json`,  registryKey: 'classes', typeName: 'ClassConfig' },
+  { path: `${BASE}data/zones.json`,    registryKey: 'zones',   typeName: 'ZoneConfig' },
+  { path: `${BASE}data/currency.json`, registryKey: 'currency', typeName: 'CurrencyConfig' },
+  { path: `${BASE}data/passives.json`, registryKey: 'passives',typeName: 'PassiveNodeConfig' },
 ];
 
 interface Loadable {
