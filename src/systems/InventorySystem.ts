@@ -9,6 +9,12 @@ export const EQUIPMENT_SLOTS = [
 
 export type EquipmentSlotId = (typeof EQUIPMENT_SLOTS)[number];
 
+interface StoredItem {
+  item: Item;
+  originCol: number;
+  originRow: number;
+}
+
 export class InventorySystem implements ISystem {
   readonly name = 'InventorySystem';
   readonly logger = Logger.forSystem('INVENTORY');
@@ -19,7 +25,7 @@ export class InventorySystem implements ISystem {
   static readonly EMPTY = 255;
 
   private occupancy!: Uint8Array;
-  private stored: { item: Item; originCol: number; originRow: number }[] = [];
+  private stored: StoredItem[] = [];
   private equipmentMap!: Map<EquipmentSlotId, Item | null>;
   private goldAmount = 0;
   private didInit = false;
@@ -64,6 +70,6 @@ export class InventorySystem implements ISystem {
   }
 
   getEquipment(): ReadonlyMap<EquipmentSlotId, Item | null> {
-    return this.equipmentMap;
+    return new Map(this.equipmentMap);
   }
 }
