@@ -130,7 +130,13 @@ tests/          — 84 tests across 8 test files
 - **Shared combat utility** (`src/utils/combatHelper.ts`): `applyDamageToTarget` extracted from CombatSystem
 - **10 skills** fully implemented across Ironclad and Ranger: Crushing Blow, Seismic Slam, Iron Fortress, Berserker's Charge, Whirlwind, Quickshot, Multishot, Explosive Arrow, Vaulting Escape, Rain of Arrows
 
+### Phase 1.5.2 — XP & Leveling (Completed)
+- **LevelingSystem** (`src/systems/LevelingSystem.ts`): Listens for COMBAT_KILL, awards XP, triggers level-ups with stat growth
+- **XP formula**: `100 × level × 1.3` (moderate curve), overflow carries over
+- **Stat growth**: Class-specific per-level — Ironclad (+12HP, +2Str, +1Dex, +1Armour), Ranger (+8HP, +2Dex, +1Str, +1Evasion)
+- **Health fully restored** on level-up
+- **Tests**: 5 new tests (XP award, zero-XP skip, level-up trigger, carryover, multi-level-up)
+
 ### Remaining Phases
-- **1.5.2** — XP & Leveling
 - **1.5.3** — Skill Bar HUD
 - **1.5.4** — Save/Load
