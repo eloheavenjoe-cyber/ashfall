@@ -116,7 +116,7 @@
     "resourceGenerated": 0,
     "cooldown": 8,
     "damageMultiplier": 1.2,
-    "skillType": "aoe",
+    "skillType": "aoe_target",
     "description": "Mark a 4x4 tile area. After 1 sec, 12 arrows rain down over 2 seconds. 120% each."
   }
 ]
