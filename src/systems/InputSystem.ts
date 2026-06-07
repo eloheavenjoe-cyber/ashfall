@@ -3,6 +3,7 @@ import { Logger } from '../core/Logger';
 import { EventBus } from '../core/EventBus';
 import { GameEvent } from '../core/GameEvent';
 import type Phaser from 'phaser';
+import type { PlayerSystem } from './PlayerSystem';
 
 const logger = Logger.forSystem('INPUT');
 
@@ -19,6 +20,7 @@ export class InputSystem implements ISystem {
   readonly logger = Logger.forSystem('INPUT');
 
   private scene!: Phaser.Scene;
+  private playerSystem!: PlayerSystem;
   private keys!: Record<string, Phaser.Input.Keyboard.Key>;
   private state: InputState = {
     moveDirection: { x: 0, y: 0 },
@@ -33,8 +35,9 @@ export class InputSystem implements ISystem {
   private attacking = false;
   private attackPressedThisFrame = false;
 
-  init(config?: { scene: Phaser.Scene }): void {
+  init(config?: { scene: Phaser.Scene; playerSystem: PlayerSystem }): void {
     this.scene = config!.scene;
+    this.playerSystem = config!.playerSystem;
     const kb = this.scene.input.keyboard!;
     this.keys = kb.addKeys('W,A,S,D,Q,E,R,F') as Record<string, Phaser.Input.Keyboard.Key>;
     logger.info('Initialised');
@@ -59,9 +62,10 @@ export class InputSystem implements ISystem {
     const worldPoint = pointer.positionToCamera(this.scene.cameras.main) as { x: number; y: number };
     this.state.aimWorldX = worldPoint.x;
     this.state.aimWorldY = worldPoint.y;
+    const playerPos = this.playerSystem.getPlayer().position;
     this.state.aimAngle = Math.atan2(
-      worldPoint.y - this.scene.cameras.main.scrollY - this.scene.cameras.main.height / 2,
-      worldPoint.x - this.scene.cameras.main.scrollX - this.scene.cameras.main.width / 2
+      worldPoint.y - playerPos.y,
+      worldPoint.x - playerPos.x
     );
 
     const wasAttacking = this.attacking;
