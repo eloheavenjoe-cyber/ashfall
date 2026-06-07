@@ -43,6 +43,13 @@ export class PlayerSystem implements ISystem {
         resourceType: classConfig.resourceType,
       },
       960, 540,
+      {
+        strength: classConfig.baseStats.strength ?? 0,
+        dexterity: classConfig.baseStats.dexterity ?? 0,
+        intelligence: classConfig.baseStats.intelligence ?? 0,
+        armour: classConfig.baseStats.armour ?? 0,
+        evasion: classConfig.baseStats.evasion ?? 0,
+      },
     );
 
     const color = CLASS_COLORS[classId] || 0x888888;
