@@ -69,7 +69,7 @@ export interface SkillConfig {
   resourceGenerated: number;
   cooldown: number;
   damageMultiplier: number;
-  skillType: 'melee' | 'ranged' | 'aoe' | 'buff' | 'mobility';
+  skillType: 'melee' | 'ranged' | 'aoe' | 'buff' | 'mobility' | 'channeled';
   description: string;
   tags?: string[];
 }

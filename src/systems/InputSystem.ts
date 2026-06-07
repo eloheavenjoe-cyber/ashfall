@@ -36,7 +36,7 @@ export class InputSystem implements ISystem {
   init(config?: { scene: Phaser.Scene }): void {
     this.scene = config!.scene;
     const kb = this.scene.input.keyboard!;
-    this.keys = kb.addKeys('W,A,S,D') as Record<string, Phaser.Input.Keyboard.Key>;
+    this.keys = kb.addKeys('W,A,S,D,Q,E,R,F') as Record<string, Phaser.Input.Keyboard.Key>;
     logger.info('Initialised');
   }
 
@@ -98,6 +98,11 @@ export class InputSystem implements ISystem {
   getAimAngle(): number {
     return this.state.aimAngle;
   }
+
+  isSkillQ(): boolean { return this.keys.Q?.isDown ?? false; }
+  isSkillE(): boolean { return this.keys.E?.isDown ?? false; }
+  isSkillR(): boolean { return this.keys.R?.isDown ?? false; }
+  isSkillF(): boolean { return this.keys.F?.isDown ?? false; }
 
   isAttacking(): boolean {
     return this.attacking;

@@ -8,7 +8,7 @@ import type { PlayerSystem } from './PlayerSystem';
 import type { EnemySystem } from './EnemySystem';
 import type { GameRegistry } from '../core/GameRegistry';
 import type { SkillConfig } from '../data/dataConfigs';
-import { calcDamage, applyMitigation } from '../utils/damage';
+import { applyDamageToTarget } from '../utils/combatHelper';
 
 const logger = Logger.forSystem('COMBAT');
 
@@ -172,36 +172,7 @@ export class CombatSystem implements ISystem {
     }
   }
 
-  private applyDamageToEnemy(es: { entity: { id: string; health: number; maxHealth: number; position: { x: number; y: number }; configId: string; damage: number; moveSpeed: number; attackRange: number; detectionRadius: number; state: string; stateTimer: number; attackCooldown: number; wanderAngle: number; wanderTimer: number; xpReward: number }; sprite: Phaser.GameObjects.Rectangle }, skillMult: number): void {
-    const result = calcDamage(this.baseDamage, skillMult);
-    const enemyConfig = this.registry.enemies.getOrNull(es.entity.configId);
-    const armour = enemyConfig ? enemyConfig.baseHP * 0.02 : 0;
-    const finalDamage = applyMitigation(result.damage, armour);
-
-    es.entity.health -= finalDamage;
-    const killed = es.entity.health <= 0;
-    if (killed) es.entity.health = 0;
-
-    EventBus.getInstance().emit(GameEvent.COMBAT_HIT, {
-      attackerId: 'player',
-      targetId: es.entity.id,
-      damage: finalDamage,
-      rawDamage: result.rawDamage,
-      damageType: 'physical',
-      isCrit: result.isCrit,
-      ailmentApplied: null,
-      hitPosition: { x: es.entity.position.x, y: es.entity.position.y },
-    });
-
-    if (killed) {
-      EventBus.getInstance().emit(GameEvent.COMBAT_KILL, {
-        attackerId: 'player',
-        targetId: es.entity.id,
-        enemyConfigId: es.entity.configId,
-        zone: null,
-        playerLevel: this.playerSystem.getPlayer().level,
-      });
-      this.enemySystem.markAsDead(es.entity.id);
-    }
+  private applyDamageToEnemy(es: any, skillMult: number): void {
+    applyDamageToTarget(es, this.baseDamage, skillMult, this.registry, this.playerSystem, this.enemySystem);
   }
 }

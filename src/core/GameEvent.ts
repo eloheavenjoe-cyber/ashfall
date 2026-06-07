@@ -46,6 +46,7 @@ export const GameEvent = {
   SKILL_GEM_UNSOCKETED: 'skill:gem_unsocketed',
   SKILL_COOLDOWN_STARTED: 'skill:cooldown_started',
   SKILL_COOLDOWN_READY: 'skill:cooldown_ready',
+  SKILL_USED: 'skill:used',
 
   INVENTORY_ITEM_ADDED: 'inventory:item_added',
   INVENTORY_ITEM_REMOVED: 'inventory:item_removed',
