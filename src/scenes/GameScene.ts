@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { Logger } from '../core/Logger';
 import { SystemManager } from '../core/SystemManager';
 import type { GameRegistry } from '../core/GameRegistry';
+import { DebugOverlayScene } from './DebugOverlayScene';
 
 const logger = Logger.forSystem('GAME');
 
@@ -31,6 +32,7 @@ export class GameScene extends Phaser.Scene {
     this.setupCamera();
     this.systemManager.fireSceneReady();
 
+    this.scene.launch(DebugOverlayScene.KEY);
     logger.info('Game scene ready');
   }
 

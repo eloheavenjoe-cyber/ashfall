@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { BootScene } from './scenes/BootScene';
 import { GameScene } from './scenes/GameScene';
+import { DebugOverlayScene } from './scenes/DebugOverlayScene';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.WEBGL,
@@ -8,7 +9,7 @@ const config: Phaser.Types.Core.GameConfig = {
   height: 1080,
   backgroundColor: '#0a0a0a',
   parent: 'game-container',
-  scene: [BootScene, GameScene],
+  scene: [BootScene, GameScene, DebugOverlayScene],
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
