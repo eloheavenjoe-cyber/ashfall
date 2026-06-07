@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { Logger } from '../core/Logger';
 import { InventorySystem } from '../systems/InventorySystem';
 import type { PlayerSystem } from '../systems/PlayerSystem';
-import type { GameRegistry } from '../core/GameRegistry';
+import type { SkillSystem } from '../systems/SkillSystem';
 
 const logger = Logger.forSystem('HUD');
 
@@ -26,14 +26,28 @@ export class HUDScene extends Phaser.Scene {
 
   private potionSlots: Phaser.GameObjects.Graphics[] = [];
   private goldText!: Phaser.GameObjects.Text;
+  private skillSystem!: SkillSystem;
+  private skillSlots: Phaser.GameObjects.Graphics[] = [];
+  private skillIconRects: { g: Phaser.GameObjects.Graphics; x: number; y: number }[] = [];
+  private skillHotkeyTexts: Phaser.GameObjects.Text[] = [];
+  private skillCostTexts: Phaser.GameObjects.Text[] = [];
+  private skillCdTexts: Phaser.GameObjects.Text[] = [];
+  private skillNameTexts: Phaser.GameObjects.Text[] = [];
+  private tooltipBg!: Phaser.GameObjects.Graphics;
+  private tooltipName!: Phaser.GameObjects.Text;
+  private tooltipDesc!: Phaser.GameObjects.Text;
+  private tooltipCd!: Phaser.GameObjects.Text;
+  private tooltipCost!: Phaser.GameObjects.Text;
+  private hoveredSlotIndex: number = -1;
 
   constructor() {
     super({ key: HUDScene.KEY });
   }
 
-  init(data: { playerSystem: PlayerSystem; inventorySystem: InventorySystem }): void {
+  init(data: { playerSystem: PlayerSystem; inventorySystem: InventorySystem; skillSystem: SkillSystem }): void {
     this.playerSystem = data.playerSystem;
     this.inventorySystem = data.inventorySystem;
+    this.skillSystem = data.skillSystem;
   }
 
   create(): void {
@@ -81,6 +95,8 @@ export class HUDScene extends Phaser.Scene {
     this.goldText = this.add.text(1320, 1056, '', {
       color: '#c9a84c', fontSize: '12px', fontFamily: 'monospace',
     }).setScrollFactor(0).setDepth(depth + 1);
+
+    this.createSkillBar();
 
     logger.info('HUD created');
   }
@@ -150,5 +166,79 @@ export class HUDScene extends Phaser.Scene {
       case 'stamina': return { light: 0x55cc44, dark: 0x115511 };
       default: return { light: 0x4488ff, dark: 0x113388 };
     }
+  }
+
+  private createSkillBar(): void {
+    const depth = 200100;
+    const slotH = 56;
+    const gap = 8;
+    const slotWidths = [140, 64, 64, 64, 64];
+    const labels = ['LMB', 'Q', 'E', 'R', 'F'];
+    const totalWidth = slotWidths.reduce((a, b) => a + b, 0) + gap * 4;
+    let startX = 960 - totalWidth / 2;
+
+    for (let i = 0; i < 5; i++) {
+      const w = slotWidths[i];
+      const x = startX;
+      const y = 1080;
+
+      const slot = this.add.graphics().setScrollFactor(0).setDepth(depth);
+      this.drawSkillSlotBg(slot, x, y, w, slotH);
+      this.skillSlots.push(slot);
+
+      const iconG = this.add.graphics().setScrollFactor(0).setDepth(depth + 1);
+      this.skillIconRects.push({ g: iconG, x: x + 8, y: y + 8 });
+
+      const hotkey = this.add.text(x + w - 10, y + slotH - 12, labels[i], {
+        color: '#aaaaaa', fontSize: '10px', fontFamily: 'monospace',
+      }).setOrigin(1, 1).setScrollFactor(0).setDepth(depth + 2);
+      this.skillHotkeyTexts.push(hotkey);
+
+      const costText = this.add.text(x + 8, y + slotH - 10, '', {
+        color: '#aaaaaa', fontSize: '8px', fontFamily: 'monospace',
+      }).setOrigin(0, 1).setScrollFactor(0).setDepth(depth + 2);
+      this.skillCostTexts.push(costText);
+
+      const cdText = this.add.text(x + w / 2, y + slotH / 2, '', {
+        color: '#ffffff', fontSize: '13px', fontFamily: 'monospace', fontStyle: 'bold',
+      }).setOrigin(0.5).setScrollFactor(0).setDepth(depth + 3);
+      this.skillCdTexts.push(cdText);
+
+      const nameText = this.add.text(x + w / 2, y + 4, '', {
+        color: '#cccccc', fontSize: '9px', fontFamily: 'monospace',
+      }).setOrigin(0.5, 0).setScrollFactor(0).setDepth(depth + 2);
+      this.skillNameTexts.push(nameText);
+
+      startX += w + gap;
+    }
+
+    // Tooltip objects (initially hidden)
+    this.tooltipBg = this.add.graphics().setScrollFactor(0).setDepth(depth + 10).setVisible(false);
+    this.tooltipName = this.add.text(0, 0, '', {
+      color: '#ffffff', fontSize: '14px', fontFamily: 'monospace', fontStyle: 'bold',
+    }).setScrollFactor(0).setDepth(depth + 11).setVisible(false);
+    this.tooltipDesc = this.add.text(0, 0, '', {
+      color: '#aaaaaa', fontSize: '12px', fontFamily: 'monospace', wordWrap: { width: 200 },
+    }).setScrollFactor(0).setDepth(depth + 11).setVisible(false);
+    this.tooltipCd = this.add.text(0, 0, '', {
+      color: '#cccccc', fontSize: '12px', fontFamily: 'monospace',
+    }).setScrollFactor(0).setDepth(depth + 11).setVisible(false);
+    this.tooltipCost = this.add.text(0, 0, '', {
+      color: '#cccccc', fontSize: '12px', fontFamily: 'monospace',
+    }).setScrollFactor(0).setDepth(depth + 11).setVisible(false);
+
+    logger.info('Skill bar created');
+  }
+
+  private drawSkillSlotBg(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number): void {
+    g.clear();
+    g.fillStyle(0x000000, 0.3);
+    g.fillRoundedRect(x + 2, y + 2, w, h, 4);
+    g.fillStyle(0x0d0d0d);
+    g.fillRoundedRect(x, y, w, h, 4);
+    g.lineStyle(1, 0x333333);
+    g.strokeRoundedRect(x, y, w, h, 4);
+    g.lineStyle(1, 0x1a1a1a);
+    g.strokeRoundedRect(x + 1, y + 1, w - 2, h - 2, 4);
   }
 }
