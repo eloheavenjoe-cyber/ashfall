@@ -101,6 +101,7 @@ export class GameScene extends Phaser.Scene {
     this.scene.launch(HUDScene.KEY, {
       playerSystem,
       inventorySystem,
+      skillSystem,
     });
     logger.info('Game scene ready');
   }
