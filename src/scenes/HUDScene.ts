@@ -103,6 +103,7 @@ export class HUDScene extends Phaser.Scene {
 
   update(): void {
     this.updateSkillBar();
+    this.updateTooltip();
     const player = this.playerSystem.getPlayer();
     const resourceColors = this.getResourceColors();
 
@@ -279,7 +280,7 @@ export class HUDScene extends Phaser.Scene {
       const y = 1080;
       const h = 56;
 
-      this.drawSkillSlotBg(this.skillSlots[i], x, y, w, h);
+      this.drawSkillSlotBg(this.skillSlots[i], x, y, w, h, this.hoveredSlotIndex === i);
 
       const iconG = this.skillIconRects[i].g;
       iconG.clear();
@@ -317,17 +318,80 @@ export class HUDScene extends Phaser.Scene {
         this.skillCdTexts[i].setVisible(false);
       }
     }
+
+    this.hoveredSlotIndex = -1;
+    const ptr = this.input.activePointer;
+    for (let i = 0; i < 5; i++) {
+      const x = this.getSlotX(i);
+      const w = this.getSlotWidth(i);
+      if (ptr.x >= x && ptr.x <= x + w && ptr.y >= 1080 && ptr.y <= 1080 + 56) {
+        this.hoveredSlotIndex = i;
+        break;
+      }
+    }
   }
 
-  private drawSkillSlotBg(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number): void {
+  private drawSkillSlotBg(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number, highlighted: boolean = false): void {
     g.clear();
+    g.fillStyle(0x000000, 0.3);
+    g.fillRoundedRect(x + 2, y + 2, w, h, 4);
+    g.fillStyle(0x0d0d0d);
+    g.fillRoundedRect(x, y, w, h, 4);
+    g.lineStyle(1, highlighted ? 0x666666 : 0x333333);
+    g.strokeRoundedRect(x, y, w, h, 4);
+    g.lineStyle(1, 0x1a1a1a);
+    g.strokeRoundedRect(x + 1, y + 1, w - 2, h - 2, 4);
+  }
+
+  private drawTooltipBg(g: Phaser.GameObjects.Graphics, x: number, y: number, w: number, h: number): void {
     g.fillStyle(0x000000, 0.3);
     g.fillRoundedRect(x + 2, y + 2, w, h, 4);
     g.fillStyle(0x0d0d0d);
     g.fillRoundedRect(x, y, w, h, 4);
     g.lineStyle(1, 0x333333);
     g.strokeRoundedRect(x, y, w, h, 4);
-    g.lineStyle(1, 0x1a1a1a);
-    g.strokeRoundedRect(x + 1, y + 1, w - 2, h - 2, 4);
+  }
+
+  private updateTooltip(): void {
+    if (this.hoveredSlotIndex < 0) {
+      this.tooltipBg.setVisible(false);
+      this.tooltipName.setVisible(false);
+      this.tooltipDesc.setVisible(false);
+      this.tooltipCd.setVisible(false);
+      this.tooltipCost.setVisible(false);
+      return;
+    }
+
+    const i = this.hoveredSlotIndex;
+    const slots: Array<'basic' | 'q' | 'e' | 'r' | 'f'> = ['basic', 'q', 'e', 'r', 'f'];
+    const skill = this.skillSystem.getSkillInSlot(slots[i]);
+    if (!skill) {
+      this.tooltipBg.setVisible(false);
+      this.tooltipName.setVisible(false);
+      this.tooltipDesc.setVisible(false);
+      this.tooltipCd.setVisible(false);
+      this.tooltipCost.setVisible(false);
+      return;
+    }
+
+    const player = this.playerSystem.getPlayer();
+    const resourceName = player.resourceType.charAt(0).toUpperCase() + player.resourceType.slice(1);
+
+    const slotX = this.getSlotX(i);
+    const slotW = this.getSlotWidth(i);
+    const tipX = slotX + slotW / 2;
+    const tipW = 220;
+    const tipH = 80;
+    const tipY = 1080 - tipH - 4;
+
+    this.tooltipBg.clear();
+    this.tooltipBg.setVisible(true);
+    this.drawTooltipBg(this.tooltipBg, tipX - tipW / 2, tipY, tipW, tipH);
+
+    this.tooltipName.setPosition(tipX, tipY + 10).setText(skill.name).setVisible(true);
+    this.tooltipDesc.setPosition(tipX, tipY + 28).setText(skill.description).setVisible(true);
+    this.tooltipCd.setPosition(tipX, tipY + 54).setText(`Cooldown: ${skill.cooldown.toFixed(1)}s`).setVisible(true);
+    this.tooltipCost.setPosition(tipX, tipY + 66).setText(`Cost: ${skill.resourceCost} ${resourceName}`)
+      .setColor(this.getSkillCostColor(player.resourceType)).setVisible(true);
   }
 }
