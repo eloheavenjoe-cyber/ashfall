@@ -49,21 +49,25 @@ export class InventoryUIScene extends Phaser.Scene {
   private tooltipText!: Phaser.GameObjects.Text;
   private hoveredItem: Item | null = null;
 
+  // Inventory panel — left half
   private static readonly PANEL_W = 700;
   private static readonly PANEL_H = 560;
   private static readonly SLOT_SIZE = 52;
   private static readonly SLOT_GAP = 4;
-  private static readonly GRID_ORIGIN_X = 822;
+  private static readonly INVENTORY_CX = 480;
+  private static readonly GRID_ORIGIN_X = 342;
   private static readonly GRID_ORIGIN_Y = 320;
 
+  // Character panel — right half
   private static readonly CHAR_PANEL_W = 500;
   private static readonly CHAR_PANEL_H = 580;
   private static readonly EQUIP_SLOT_SIZE = 64;
-  private static readonly EQUIP_LEFT_X = 740;
-  private static readonly EQUIP_RIGHT_X = 740 + 64 + 12;
+  private static readonly CHARACTER_CX = 1440;
+  private static readonly EQUIP_LEFT_X = 1220;
+  private static readonly EQUIP_RIGHT_X = 1296;
   private static readonly EQUIP_START_Y = 310;
   private static readonly EQUIP_ROW_H = 92;
-  private static readonly STATS_X = 910;
+  private static readonly STATS_X = 1390;
   private static readonly STATS_START_Y = 300;
 
   constructor() {
@@ -156,9 +160,8 @@ export class InventoryUIScene extends Phaser.Scene {
   }
 
   private createInventoryPanel(): void {
-    const cx = 960;
+    const cx = InventoryUIScene.INVENTORY_CX;
     const cy = 540;
-    const px = cx - InventoryUIScene.PANEL_W / 2;
     const py = cy - InventoryUIScene.PANEL_H / 2;
 
     this.inventoryBg = this.add.rectangle(cx, cy, InventoryUIScene.PANEL_W, InventoryUIScene.PANEL_H, 0x0d0d0d, 0.95)
@@ -196,7 +199,7 @@ export class InventoryUIScene extends Phaser.Scene {
   }
 
   private createCharacterPanel(): void {
-    const cx = 960;
+    const cx = InventoryUIScene.CHARACTER_CX;
     const cy = 540;
     const py = cy - InventoryUIScene.CHAR_PANEL_H / 2;
 
