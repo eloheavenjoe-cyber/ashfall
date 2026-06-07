@@ -1,0 +1,87 @@
+export const GameEvent = {
+  COMBAT_HIT: 'combat:hit',
+  COMBAT_KILL: 'combat:kill',
+  COMBAT_PLAYER_HIT: 'combat:player_hit',
+  COMBAT_PLAYER_DEATH: 'combat:player_death',
+  COMBAT_CRIT: 'combat:crit',
+  COMBAT_AILMENT_APPLIED: 'combat:ailment_applied',
+  COMBAT_AILMENT_EXPIRED: 'combat:ailment_expired',
+  COMBAT_SKILL_USED: 'combat:skill_used',
+  COMBAT_ATTACK_MISSED: 'combat:attack_missed',
+
+  LOOT_ITEM_DROPPED: 'loot:item_dropped',
+  LOOT_ITEM_PICKED_UP: 'loot:item_picked_up',
+  LOOT_CURRENCY_DROPPED: 'loot:currency_dropped',
+  LOOT_CURRENCY_PICKED_UP: 'loot:currency_picked_up',
+  LOOT_INVENTORY_FULL: 'loot:inventory_full',
+
+  CRAFTING_CURRENCY_APPLIED: 'crafting:currency_applied',
+  CRAFTING_VAAL_APPLIED: 'crafting:vaal_applied',
+  CRAFTING_BENCH_RECIPE_USED: 'crafting:bench_recipe_used',
+  CRAFTING_ITEM_CORRUPTED: 'crafting:item_corrupted',
+  CRAFTING_FAILED: 'crafting:failed',
+
+  GAMBLING_INITIATED: 'gambling:initiated',
+  GAMBLING_RESULT: 'gambling:result',
+  GAMBLING_HOT_STREAK: 'gambling:hot_streak',
+  GAMBLING_HIGH_ROLLER_USED: 'gambling:high_roller_used',
+  GAMBLING_INSUFFICIENT_GOLD: 'gambling:insufficient_gold',
+
+  PLAYER_LEVEL_UP: 'player:level_up',
+  PLAYER_XP_GAINED: 'player:xp_gained',
+  PLAYER_STAT_CHANGED: 'player:stat_changed',
+  PLAYER_RESOURCE_CHANGED: 'player:resource_changed',
+  PLAYER_HEALTH_CHANGED: 'player:health_changed',
+  PLAYER_HEALTH_LOW: 'player:health_low',
+  PLAYER_RESPAWNED: 'player:respawned',
+  PLAYER_GOLD_CHANGED: 'player:gold_changed',
+  PLAYER_MOVED: 'player:moved',
+
+  PASSIVE_NODE_ALLOCATED: 'passive:node_allocated',
+  PASSIVE_NODE_REFUNDED: 'passive:node_refunded',
+  PASSIVE_POINTS_CHANGED: 'passive:points_changed',
+
+  SKILL_GEM_LEVELLED: 'skill:gem_levelled',
+  SKILL_GEM_SOCKETED: 'skill:gem_socketed',
+  SKILL_GEM_UNSOCKETED: 'skill:gem_unsocketed',
+  SKILL_COOLDOWN_STARTED: 'skill:cooldown_started',
+  SKILL_COOLDOWN_READY: 'skill:cooldown_ready',
+
+  INVENTORY_ITEM_ADDED: 'inventory:item_added',
+  INVENTORY_ITEM_REMOVED: 'inventory:item_removed',
+  INVENTORY_ITEM_EQUIPPED: 'inventory:item_equipped',
+  INVENTORY_ITEM_UNEQUIPPED: 'inventory:item_unequipped',
+  INVENTORY_ITEM_MOVED: 'inventory:item_moved',
+
+  ENEMY_SPAWNED: 'enemy:spawned',
+  ENEMY_STATE_CHANGED: 'enemy:state_changed',
+  ENEMY_DIED: 'enemy:died',
+  ENEMY_MODIFIER_APPLIED: 'enemy:modifier_applied',
+
+  ZONE_LOADING: 'zone:loading',
+  ZONE_LOADED: 'zone:loaded',
+  ZONE_EXITED: 'zone:exited',
+  ZONE_BOSS_ENTERED: 'zone:boss_entered',
+  ZONE_BOSS_KILLED: 'zone:boss_killed',
+  WAYPOINT_DISCOVERED: 'zone:waypoint_discovered',
+  WAYPOINT_USED: 'zone:waypoint_used',
+  SHRINE_ACTIVATED: 'zone:shrine_activated',
+  CHEST_OPENED: 'zone:chest_opened',
+
+  UI_SCREEN_OPENED: 'ui:screen_opened',
+  UI_SCREEN_CLOSED: 'ui:screen_closed',
+  UI_TOOLTIP_SHOWN: 'ui:tooltip_shown',
+  UI_TOOLTIP_HIDDEN: 'ui:tooltip_hidden',
+  UI_NOTIFICATION: 'ui:notification',
+
+  SAVE_TRIGGERED: 'save:triggered',
+  SAVE_COMPLETE: 'save:complete',
+  SAVE_FAILED: 'save:failed',
+  SAVE_LOADED: 'save:loaded',
+
+  SESSION_STARTED: 'session:started',
+  SESSION_PAUSED: 'session:paused',
+  SESSION_RESUMED: 'session:resumed',
+} as const;
+
+export type GameEvent = (typeof GameEvent)[keyof typeof GameEvent];

@@ -1,0 +1,29 @@
+{
+  "name": "ashfall",
+  "version": "1.0.0",
+  "description": "ASHFALL — 2D Isometric Action RPG",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "arpg",
+    "game",
+    "phaser",
+    "isometric"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^6.0.3",
+    "vite": "^8.0.16",
+    "vitest": "^4.1.8"
+  },
+  "dependencies": {
+    "phaser": "^3.70.0"
+  }
+}
