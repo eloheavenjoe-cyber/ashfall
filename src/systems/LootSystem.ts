@@ -6,6 +6,7 @@ import { GameEvent } from '../core/GameEvent';
 import type { GameRegistry } from '../core/GameRegistry';
 import type { PlayerSystem } from './PlayerSystem';
 import type { EnemySystem } from './EnemySystem';
+import type { InventorySystem } from './InventorySystem';
 import type { Item } from '../entities/Item';
 import { getRarityColor, getRarityHtmlColor } from '../entities/Item';
 import { generateLootDrop } from './ItemGenerator';
@@ -28,6 +29,7 @@ export class LootSystem implements ISystem {
   private scene!: Phaser.Scene;
   private playerSystem!: PlayerSystem;
   private enemySystem!: EnemySystem;
+  private inventorySystem!: InventorySystem;
   private registry!: GameRegistry;
   private didInit = false;
 
@@ -40,6 +42,9 @@ export class LootSystem implements ISystem {
     this.playerSystem = cfg.playerSystem as PlayerSystem;
     this.enemySystem = cfg.enemySystem as EnemySystem;
     this.registry = cfg.registry as GameRegistry;
+    if (cfg.inventorySystem) {
+      this.inventorySystem = cfg.inventorySystem as InventorySystem;
+    }
 
     EventBus.getInstance().on(GameEvent.COMBAT_KILL, this.onKill, this);
 
@@ -110,11 +115,17 @@ export class LootSystem implements ISystem {
       const dist = Math.sqrt(dx * dx + dy * dy);
 
       if (dist < PICKUP_RANGE) {
+        if (this.inventorySystem) {
+          const added = this.inventorySystem.addItem(gi.item);
+          if (!added) {
+            logger.warn('Inventory full, item stays on ground', { itemId: gi.item.id });
+            continue;
+          }
+        }
         gi.sprite.destroy();
         gi.label.destroy();
         this.groundItems.splice(i, 1);
         logger.info('Item picked up', { itemId: gi.item.id, name: gi.item.name });
-        // TODO: Add to inventory (Phase 1.4.2)
       }
     }
   }

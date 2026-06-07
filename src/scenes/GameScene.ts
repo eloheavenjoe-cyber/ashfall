@@ -8,6 +8,7 @@ import { EnemySystem } from '../systems/EnemySystem';
 import { CombatSystem } from '../systems/CombatSystem';
 import { HitFeedbackSystem } from '../systems/HitFeedbackSystem';
 import { LootSystem } from '../systems/LootSystem';
+import { InventorySystem } from '../systems/InventorySystem';
 import { DebugOverlayScene } from './DebugOverlayScene';
 
 const logger = Logger.forSystem('GAME');
@@ -43,6 +44,7 @@ export class GameScene extends Phaser.Scene {
     const combatSystem = new CombatSystem();
     const hitFeedbackSystem = new HitFeedbackSystem();
     const lootSystem = new LootSystem();
+    const inventorySystem = new InventorySystem();
 
     this.systemManager.add(inputSystem);
     this.systemManager.add(playerSystem);
@@ -50,6 +52,7 @@ export class GameScene extends Phaser.Scene {
     this.systemManager.add(combatSystem);
     this.systemManager.add(hitFeedbackSystem);
     this.systemManager.add(lootSystem);
+    this.systemManager.add(inventorySystem);
 
     this.systemManager.initAll({
       scene: this,
@@ -59,6 +62,7 @@ export class GameScene extends Phaser.Scene {
       playerSystem,
       enemySystem,
       combatSystem,
+      inventorySystem,
     });
 
     enemySystem.spawnEnemies(960, 540);
