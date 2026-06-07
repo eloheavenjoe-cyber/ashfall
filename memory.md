@@ -137,6 +137,13 @@ tests/          — 84 tests across 8 test files
 - **Health fully restored** on level-up
 - **Tests**: 5 new tests (XP award, zero-XP skip, level-up trigger, carryover, multi-level-up)
 
+### Phase 1.5.3 — Skill Bar HUD (Completed)
+- **Skill Bar**: 5 slots (LMB basic + Q/E/R/F) below XP bar at y=1080
+- **Visual**: HUD-matching dark slots, colored skill type icons, hotkey labels, resource cost text
+- **Cooldown**: Semi-transparent black overlay sweeping top-down, timer text centered in slot
+- **Tooltip**: Hover shows skill name, description, cooldown, and resource cost
+- **Resource-aware**: Insufficient resource shows red cost text + desaturated icon
+- **Dependency**: HUDScene now receives skillSystem from GameScene launch data
+
 ### Remaining Phases
-- **1.5.3** — Skill Bar HUD (4 hotkey slots Q/E/R/F below XP bar, cooldown overlay + timer, resource cost, matching visual style)
 - **1.5.4** — Save/Load
