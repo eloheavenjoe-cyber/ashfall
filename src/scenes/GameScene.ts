@@ -18,6 +18,7 @@ import { MobilitySkill } from '../systems/skills/MobilitySkill';
 import { BuffSkill } from '../systems/skills/BuffSkill';
 import { ChanneledSkill } from '../systems/skills/ChanneledSkill';
 import { LevelingSystem } from '../systems/LevelingSystem';
+import { SaveSystem } from '../systems/SaveSystem';
 import { deserializeItem } from '../core/saveHelpers';
 import type { SerializedItem } from '../data/saveTypes';
 import type { Item } from '../entities/Item';
@@ -80,6 +81,8 @@ export class GameScene extends Phaser.Scene {
     this.systemManager.add(skillSystem);
     const levelingSystem = new LevelingSystem();
     this.systemManager.add(levelingSystem);
+    const saveSystem = new SaveSystem();
+    this.systemManager.add(saveSystem);
 
     this.systemManager.initAll({
       scene: this,
@@ -92,6 +95,7 @@ export class GameScene extends Phaser.Scene {
       inventorySystem,
       skillSystem,
       levelingSystem,
+      saveSystem,
     });
 
     if (this.saveData) {
