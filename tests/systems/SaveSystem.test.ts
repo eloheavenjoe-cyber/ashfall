@@ -21,8 +21,7 @@ Object.defineProperty(globalThis, 'localStorage', {
 beforeAll(() => { Logger.getInstance().setLevel(LogLevel.OFF); });
 afterAll(() => { Logger.getInstance().setLevel(LogLevel.DEBUG); });
 
-describe('SaveSystem', () => {
-  function makeMockSystems() {
+function makeMockSystems() {
     const player = {
       classId: 'ironclad',
       position: { x: 100, y: 200 },
@@ -33,21 +32,60 @@ describe('SaveSystem', () => {
       strength: 18, dexterity: 8, intelligence: 5,
       armour: 15, evasion: 0,
     };
+
+    const invState = {
+      gold: 500,
+      equipped: new Map([['main_hand', null], ['off_hand', null]]),
+      storedItems: [] as any[],
+    };
+
+    const skillState = {
+      mappings: { basic: { id: 'crushing_blow' }, q: null, e: null, r: null, f: null } as Record<string, any>,
+    };
+
     return {
       playerSystem: {
         getPlayer: () => player,
         getClassId: () => 'ironclad',
+        restore: (data: any) => {
+          player.position.x = data.position.x;
+          player.position.y = data.position.y;
+          player.level = data.level;
+          player.experience = data.experience;
+          player.experienceToNext = data.experienceToNext;
+          player.health = data.health;
+          player.maxHealth = data.maxHealth;
+          player.resource = data.resource;
+          player.maxResource = data.maxResource;
+          player.strength = data.strength;
+          player.dexterity = data.dexterity;
+          player.intelligence = data.intelligence;
+          player.armour = data.armour;
+          player.evasion = data.evasion;
+        },
       },
       inventorySystem: {
-        getGold: () => 500,
-        getEquipment: () => new Map([['main_hand', null], ['off_hand', null]]),
-        getStoredItems: () => [],
+        getGold: () => invState.gold,
+        getEquipment: () => invState.equipped,
+        getStoredItems: () => invState.storedItems,
+        restore: (data: any) => {
+          invState.gold = data.gold;
+          invState.equipped.clear();
+          for (const [slot, item] of data.equipped) {
+            invState.equipped.set(slot, item);
+          }
+          invState.storedItems.length = 0;
+          invState.storedItems.push(...data.bag);
+        },
       },
       skillSystem: {
-        getAllSlotMappings: () => ({ basic: { id: 'crushing_blow' }, q: null, e: null, r: null, f: null }),
+        getAllSlotMappings: () => skillState.mappings,
+        restore: (data: any) => { skillState.mappings = { ...data.slots }; },
       },
     };
   }
+
+describe('SaveSystem', () => {
 
   it('save() writes to localStorage and returns true', () => {
     const system = new SaveSystem();
@@ -154,5 +192,43 @@ describe('SaveSystem', () => {
 
   afterEach(() => {
     localStorage.removeItem('ashfall_save_0');
+  });
+});
+
+describe('restore integration', () => {
+  it('restores player state into PlayerSystem', () => {
+    const { playerSystem } = makeMockSystems();
+    const data = {
+      position: { x: 500, y: 300 },
+      level: 10, experience: 1200, experienceToNext: 1300,
+      health: 90, maxHealth: 200, resource: 80, maxResource: 100,
+      strength: 30, dexterity: 12, intelligence: 8, armour: 25, evasion: 5,
+    };
+    (playerSystem as any).restore(data);
+    const p = playerSystem.getPlayer();
+    expect(p.position.x).toBe(500);
+    expect(p.level).toBe(10);
+    expect(p.health).toBe(90);
+    expect(p.strength).toBe(30);
+  });
+
+  it('restores inventory state into InventorySystem', () => {
+    const { inventorySystem } = makeMockSystems();
+    const item = { id: 'saved_item', slot: 'body', gridW: 2, gridH: 3 };
+    const equipment = new Map<string, any>([['body', item]]);
+    (inventorySystem as any).restore({
+      gold: 999,
+      equipped: equipment,
+      bag: [{ item, originCol: 0, originRow: 2 }],
+    });
+    expect((inventorySystem as any).getGold()).toBe(999);
+  });
+
+  it('restores skills into SkillSystem', () => {
+    const { skillSystem } = makeMockSystems();
+    (skillSystem as any).restore({ slots: { basic: 'crushing_blow', q: null } });
+    const mappings = skillSystem.getAllSlotMappings();
+    expect(mappings.basic).not.toBeNull();
+    expect(mappings.q).toBeNull();
   });
 });

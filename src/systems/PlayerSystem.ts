@@ -108,4 +108,22 @@ export class PlayerSystem implements ISystem {
   getClassId(): string {
     return this.player.classId;
   }
+
+  restore(data: { position: { x: number; y: number }; level: number; experience: number; experienceToNext: number; health: number; maxHealth: number; resource: number; maxResource: number; strength: number; dexterity: number; intelligence: number; armour: number; evasion: number }): void {
+    const p = this.player;
+    p.position.x = data.position.x;
+    p.position.y = data.position.y;
+    p.level = data.level;
+    p.experience = data.experience;
+    p.experienceToNext = data.experienceToNext;
+    p.health = data.health;
+    p.maxHealth = data.maxHealth;
+    p.resource = data.resource;
+    p.maxResource = data.maxResource;
+    p.strength = data.strength;
+    p.dexterity = data.dexterity;
+    p.intelligence = data.intelligence;
+    p.armour = data.armour;
+    p.evasion = data.evasion;
+  }
 }

@@ -252,6 +252,25 @@ export class InventorySystem implements ISystem {
     return true;
   }
 
+  restore(data: { gold: number; equipped: ReadonlyMap<string, Item | null>; bag: Array<{ item: Item; originCol: number; originRow: number }> }): void {
+    this.occupancy = new Uint8Array(InventorySystem.SIZE).fill(InventorySystem.EMPTY);
+    this.stored = [];
+    this.equipmentMap = new Map();
+    for (const slot of EQUIPMENT_SLOTS) {
+      this.equipmentMap.set(slot, data.equipped.get(slot) ?? null);
+    }
+    this.goldAmount = data.gold;
+    for (const b of data.bag) {
+      const idx = this.stored.length;
+      for (let r = b.originRow; r < b.originRow + b.item.gridH; r++) {
+        for (let c = b.originCol; c < b.originCol + b.item.gridW; c++) {
+          this.occupancy[this.toIndex(c, r)] = idx;
+        }
+      }
+      this.stored.push({ item: b.item, originCol: b.originCol, originRow: b.originRow });
+    }
+  }
+
   addGold(amount: number): void {
     if (amount < 0) return;
     this.goldAmount = Math.min(this.goldAmount + amount, 9_999_999);

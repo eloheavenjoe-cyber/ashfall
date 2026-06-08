@@ -189,6 +189,26 @@ export class SkillSystem implements ISystem {
     return result;
   }
 
+  restore(data: { slots: Record<string, string | null> }): void {
+    for (const e of this.activeEffects) e.destroy();
+    this.activeEffects = [];
+    this.cooldowns.clear();
+    this.isChannelling = false;
+    this.channelSlot = null;
+    this.shieldRemaining = 0;
+    this.shieldTimer = 0;
+
+    for (const [slotStr, skillId] of Object.entries(data.slots)) {
+      const slot = slotStr as SkillSlot;
+      if (skillId) {
+        const skill = this.registry.skills.getOrNull(skillId);
+        this.skillSlots.set(slot, skill ?? null);
+      } else {
+        this.skillSlots.set(slot, null);
+      }
+    }
+  }
+
   getCooldown(slot: SkillSlot): number {
     return this.cooldowns.get(slot) ?? 0;
   }
