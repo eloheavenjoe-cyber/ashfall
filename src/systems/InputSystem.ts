@@ -40,6 +40,14 @@ export class InputSystem implements ISystem {
     this.playerSystem = config!.playerSystem;
     const kb = this.scene.input.keyboard!;
     this.keys = kb.addKeys('W,A,S,D,Q,E,R,F') as Record<string, Phaser.Input.Keyboard.Key>;
+
+    this.scene.input.keyboard!.on('keydown', (event: KeyboardEvent) => {
+      if (event.key === 'F5') {
+        event.preventDefault();
+        EventBus.getInstance().emit(GameEvent.SAVE_TRIGGERED, { reason: 'manual' });
+      }
+    });
+
     logger.info('Initialised');
   }
 
