@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { Logger } from '../core/Logger';
 import type { GameRegistry } from '../core/GameRegistry';
+import { SaveSystem } from '../systems/SaveSystem';
 
 const logger = Logger.forSystem('MENU');
 
@@ -14,11 +15,6 @@ interface MenuItem {
   action: string;
 }
 
-const MENU_ITEMS: MenuItem[] = [
-  { label: 'New Game', action: 'new_game' },
-  { label: 'Load Game', action: 'load_game' },
-];
-
 export class MainMenuScene extends Phaser.Scene {
   static readonly KEY = 'MainMenuScene';
 
@@ -26,6 +22,7 @@ export class MainMenuScene extends Phaser.Scene {
   private selectedIndex = 0;
   private menuTexts: Phaser.GameObjects.Text[] = [];
   private canInteract = false;
+  private menuItems: MenuItem[] = [];
 
   constructor() {
     super({ key: MainMenuScene.KEY });
@@ -63,7 +60,15 @@ export class MainMenuScene extends Phaser.Scene {
       fontFamily: 'monospace',
     }).setOrigin(0.5);
 
-    MENU_ITEMS.forEach((item, i) => {
+    const menuItems: MenuItem[] = [
+      { label: 'New Game', action: 'new_game' },
+    ];
+    if (SaveSystem.hasSave()) {
+      menuItems.push({ label: 'Continue', action: 'continue' });
+    }
+    this.menuItems = menuItems;
+
+    this.menuItems.forEach((item, i) => {
       const text = this.add.text(cx, cy + 30 + i * 50, `-- ${item.label} --`, {
         color: i === this.selectedIndex ? GOLD : GREY,
         fontSize: '24px',
@@ -99,13 +104,13 @@ export class MainMenuScene extends Phaser.Scene {
 
       if (event.key === 'ArrowUp' || event.key === 'w' || event.key === 'W') {
         event.preventDefault();
-        this.selectedIndex = (this.selectedIndex - 1 + MENU_ITEMS.length) % MENU_ITEMS.length;
+        this.selectedIndex = (this.selectedIndex - 1 + this.menuItems.length) % this.menuItems.length;
         this.highlightSelected();
       }
 
       if (event.key === 'ArrowDown' || event.key === 's' || event.key === 'S') {
         event.preventDefault();
-        this.selectedIndex = (this.selectedIndex + 1) % MENU_ITEMS.length;
+        this.selectedIndex = (this.selectedIndex + 1) % this.menuItems.length;
         this.highlightSelected();
       }
 
@@ -127,23 +132,24 @@ export class MainMenuScene extends Phaser.Scene {
     if (!this.canInteract) return;
     this.canInteract = false;
 
-    const item = MENU_ITEMS[index];
+    const item = this.menuItems[index];
     logger.info('Menu item selected', { action: item.action });
 
     if (item.action === 'new_game') {
       this.scene.start('ClassSelectScene', { registry: this.gameRegistry });
-    } else {
-      const text = this.add.text(
-        this.cameras.main.width / 2,
-        this.cameras.main.height / 2 + 280,
-        '-- Load not yet implemented --',
-        { color: '#ff6644', fontSize: '16px', fontFamily: 'monospace' },
-      ).setOrigin(0.5);
-
-      this.time.delayedCall(2000, () => {
-        text.destroy();
-        this.canInteract = true;
-      });
+    } else if (item.action === 'continue') {
+      const saveData = SaveSystem.load();
+      if (saveData) {
+        this.scene.start('GameScene', { registry: this.gameRegistry, classId: saveData.character.classId, saveData });
+      } else {
+        const text = this.add.text(
+          this.cameras.main.width / 2,
+          this.cameras.main.height / 2 + 280,
+          '-- Save corrupted or missing --',
+          { color: '#ff6644', fontSize: '16px', fontFamily: 'monospace' },
+        ).setOrigin(0.5);
+        this.time.delayedCall(2000, () => { text.destroy(); this.canInteract = true; });
+      }
     }
   }
 }
