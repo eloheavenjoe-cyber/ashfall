@@ -145,5 +145,12 @@ tests/          — 84 tests across 8 test files
 - **Resource-aware**: Insufficient resource shows red cost text + desaturated icon
 - **Dependency**: HUDScene now receives skillSystem from GameScene launch data
 
+### Phase 1.5.4 — Save/Load (In Progress)
+- **Current state**: No save/load code exists. GDD §18 and §26.4 specify save format, events, auto-save triggers, validation, and error handling. GameEvent.ts already has SAVE_TRIGGERED/SAVE_COMPLETE/SAVE_FAILED/SAVE_LOADED constants defined but unused.
+- **Systems with serializable state**: PlayerEntity (stats, pos, level, XP), InventorySystem (items, equipment, gold), SkillSystem (slot→skillId mapping)
+- **Transient (not saved)**: Enemy positions, cooldowns, projectiles, ground items, active effects, shield state
+- **Storage**: localStorage via JSON.stringify/parse — no external libraries needed
+- **Pending design decisions**: Manual save vs auto-save only, what parts of the GDD save struct to implement now vs defer (settings, statistics), migration strategy for future save versions
+
 ### Remaining Phases
-- **1.5.4** — Save/Load
+
