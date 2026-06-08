@@ -18,6 +18,9 @@ import { MobilitySkill } from '../systems/skills/MobilitySkill';
 import { BuffSkill } from '../systems/skills/BuffSkill';
 import { ChanneledSkill } from '../systems/skills/ChanneledSkill';
 import { LevelingSystem } from '../systems/LevelingSystem';
+import { deserializeItem } from '../core/saveHelpers';
+import type { SerializedItem } from '../data/saveTypes';
+import type { Item } from '../entities/Item';
 import { DebugOverlayScene } from './DebugOverlayScene';
 import { HUDScene } from './HUDScene';
 import { InventoryUIScene } from './InventoryUIScene';
@@ -30,14 +33,16 @@ export class GameScene extends Phaser.Scene {
   private gameRegistry!: GameRegistry;
   private classId!: string;
   private systemManager!: SystemManager;
+  private saveData: any = null;
 
   constructor() {
     super({ key: GameScene.KEY });
   }
 
-  init(data: { registry: GameRegistry; classId: string }): void {
+  init(data: { registry: GameRegistry; classId: string; saveData?: any }): void {
     this.gameRegistry = data.registry;
     this.classId = data.classId || 'ironclad';
+    this.saveData = data.saveData ?? null;
     this.systemManager = new SystemManager();
   }
 
@@ -89,7 +94,33 @@ export class GameScene extends Phaser.Scene {
       levelingSystem,
     });
 
-    enemySystem.spawnEnemies(960, 540);
+    if (this.saveData) {
+      const sd = this.saveData;
+      playerSystem.restore(sd.character);
+
+      const equipment = new Map<string, Item | null>();
+      for (const [slot, serialized] of Object.entries(sd.inventory.equipped)) {
+        equipment.set(slot, serialized ? deserializeItem(serialized as SerializedItem) : null);
+      }
+      const bagItems = sd.inventory.bag.map((s: SerializedItem) => ({
+        item: deserializeItem(s),
+        originCol: s.originCol,
+        originRow: s.originRow,
+      }));
+      inventorySystem.restore({
+        gold: sd.inventory.gold,
+        equipped: equipment,
+        bag: bagItems,
+      });
+
+      skillSystem.restore(sd.skills);
+
+      this.cameras.main.scrollX = playerSystem.getPlayer().position.x - 960;
+      this.cameras.main.scrollY = playerSystem.getPlayer().position.y - 540;
+      this.saveData = null;
+    } else {
+      enemySystem.spawnEnemies(960, 540);
+    }
 
     this.systemManager.fireSceneReady();
     this.scene.launch(DebugOverlayScene.KEY);
