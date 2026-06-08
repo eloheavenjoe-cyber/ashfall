@@ -181,6 +181,14 @@ export class SkillSystem implements ISystem {
     return this.skillSlots.get(slot) ?? null;
   }
 
+  getAllSlotMappings(): Record<string, SkillConfig | null> {
+    const result: Record<string, SkillConfig | null> = {};
+    for (const [slot, skill] of this.skillSlots) {
+      result[slot] = skill;
+    }
+    return result;
+  }
+
   getCooldown(slot: SkillSlot): number {
     return this.cooldowns.get(slot) ?? 0;
   }

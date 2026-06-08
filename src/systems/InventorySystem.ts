@@ -57,6 +57,10 @@ export class InventorySystem implements ISystem {
     return this.goldAmount;
   }
 
+  getStoredItems(): ReadonlyArray<{ item: Item; originCol: number; originRow: number }> {
+    return this.stored.map(s => ({ item: s.item, originCol: s.originCol, originRow: s.originRow }));
+  }
+
   getInventorySlots(): (Item | null)[] {
     const result: (Item | null)[] = new Array(InventorySystem.SIZE).fill(null);
     for (const s of this.stored) {
