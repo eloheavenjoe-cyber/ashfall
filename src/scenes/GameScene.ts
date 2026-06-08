@@ -20,7 +20,7 @@ import { ChanneledSkill } from '../systems/skills/ChanneledSkill';
 import { LevelingSystem } from '../systems/LevelingSystem';
 import { SaveSystem } from '../systems/SaveSystem';
 import { deserializeItem } from '../core/saveHelpers';
-import type { SerializedItem } from '../data/saveTypes';
+import type { SaveData, SerializedItem } from '../data/saveTypes';
 import type { Item } from '../entities/Item';
 import { DebugOverlayScene } from './DebugOverlayScene';
 import { HUDScene } from './HUDScene';
@@ -34,13 +34,13 @@ export class GameScene extends Phaser.Scene {
   private gameRegistry!: GameRegistry;
   private classId!: string;
   private systemManager!: SystemManager;
-  private saveData: any = null;
+  private saveData: SaveData | null = null;
 
   constructor() {
     super({ key: GameScene.KEY });
   }
 
-  init(data: { registry: GameRegistry; classId: string; saveData?: any }): void {
+  init(data: { registry: GameRegistry; classId: string; saveData?: SaveData }): void {
     this.gameRegistry = data.registry;
     this.classId = data.classId || 'ironclad';
     this.saveData = data.saveData ?? null;

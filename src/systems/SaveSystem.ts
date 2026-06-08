@@ -155,6 +155,7 @@ export class SaveSystem implements ISystem {
     }
     const d = data as Record<string, unknown>;
     if (typeof d.version !== 'number') errors.push('version must be a number');
+    else if (d.version !== SAVE_VERSION) errors.push(`unsupported save version ${d.version}`);
     if (!d.character || typeof d.character !== 'object') errors.push('character is required');
     else {
       const c = d.character as Record<string, unknown>;
@@ -162,6 +163,12 @@ export class SaveSystem implements ISystem {
       if (typeof c.level !== 'number') errors.push('character.level must be a number');
       if (typeof c.health !== 'number') errors.push('character.health must be a number');
       if (typeof c.maxHealth !== 'number') errors.push('character.maxHealth must be a number');
+      if (!c.position || typeof c.position !== 'object') errors.push('character.position is required');
+      else {
+        const pos = c.position as Record<string, unknown>;
+        if (typeof pos.x !== 'number') errors.push('character.position.x must be a number');
+        if (typeof pos.y !== 'number') errors.push('character.position.y must be a number');
+      }
     }
     if (!d.inventory || typeof d.inventory !== 'object') errors.push('inventory is required');
     if (!d.skills || typeof d.skills !== 'object') errors.push('skills is required');
